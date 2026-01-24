@@ -24,7 +24,7 @@
         footer { background: var(--azul-pr); color: white; text-align: center; padding: 2rem; margin-top: 3rem; }
     </style>
 </head>
-<!-- MyakyBot com Microsoft Copilot embutido (iframe dentro da janela) -->
+<!-- MyakyBot com Google Gemini embutido (iframe) -->
 <div id="myakybot-container">
     <button id="myakybot-toggle" title="MyakyBot – Estou aqui para ajudar">
         <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -34,23 +34,21 @@
 
     <div id="myakybot-window" class="hidden">
         <div class="myakybot-header">
-            <span>MyakyBot – Assistente dedicado (Powered by Copilot)</span>
+            <span>MyakyBot – Assistente dedicado (Powered by Gemini)</span>
             <button id="myakybot-close">×</button>
         </div>
         
-        <!-- AQUI FICA O IFRAME DO COPILOT – ele ocupa todo o espaço das mensagens -->
+        <!-- Gemini embutido – ocupa todo o espaço da janela -->
         <div id="myakybot-messages" style="flex: 1; overflow: hidden; padding: 0; background: #f8f9fa;">
             <iframe 
-                src="https://copilot.microsoft.com/?prompt=Você%20é%20MyakyBot,%20assistente%20dedicado%20para%20professores%20brasileiros.%20Responda%20de%20forma%20acolhedora,%20empática%20e%20prática.%20Ajude%20com%20planejamento%20de%20aulas,%20estratégias%20de%20inclusão%20(TDAH,%20TEA,%20dislexia,%20altas%20habilidades),%20orientação%20sobre%20comportamento%20dos%20alunos,%20dúvidas%20de%20conteúdo%20ou%20apoio%20emocional."
+                src="https://gemini.google.com/?prompt=Você%20é%20MyakyBot,%20assistente%20dedicado%20e%20profissional%20para%20professores%20brasileiros.%20Responda%20de%20forma%20acolhedora,%20empática%20e%20prática.%20Ajude%20com%20planejamento%20de%20aulas%20alinhadas%20à%20BNCC,%20estratégias%20de%20inclusão%20(TDAH,%20TEA,%20dislexia,%20altas%20habilidades),%20orientação%20sobre%20comportamento%20dos%20alunos,%20dúvidas%20de%20conteúdo%20ou%20apoio%20emocional."
                 width="100%"
                 height="100%"
                 frameborder="0"
-                title="MyakyBot – Powered by Microsoft Copilot"
-                allowfullscreen>
+                allowfullscreen
+                title="MyakyBot – Powered by Google Gemini">
             </iframe>
         </div>
-
-        <!-- Removi o input e botão, pois o iframe já tem chat próprio -->
     </div>
 </div>
 
@@ -127,3 +125,4 @@
 </body>
 
 </html>
+
