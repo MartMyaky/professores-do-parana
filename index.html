@@ -24,7 +24,62 @@
         footer { background: var(--azul-pr); color: white; text-align: center; padding: 2rem; margin-top: 3rem; }
     </style>
 </head>
-<body>
+<!-- MyakyBot com Microsoft Copilot embutido (iframe dentro da janela) -->
+<div id="myakybot-container">
+    <button id="myakybot-toggle" title="MyakyBot – Estou aqui para ajudar">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z" fill="var(--azul-pr)"/>
+        </svg>
+    </button>
+
+    <div id="myakybot-window" class="hidden">
+        <div class="myakybot-header">
+            <span>MyakyBot – Assistente dedicado (Powered by Copilot)</span>
+            <button id="myakybot-close">×</button>
+        </div>
+        
+        <!-- AQUI FICA O IFRAME DO COPILOT – ele ocupa todo o espaço das mensagens -->
+        <div id="myakybot-messages" style="flex: 1; overflow: hidden; padding: 0; background: #f8f9fa;">
+            <iframe 
+                src="https://copilot.microsoft.com/?prompt=Você%20é%20MyakyBot,%20assistente%20dedicado%20para%20professores%20brasileiros.%20Responda%20de%20forma%20acolhedora,%20empática%20e%20prática.%20Ajude%20com%20planejamento%20de%20aulas,%20estratégias%20de%20inclusão%20(TDAH,%20TEA,%20dislexia,%20altas%20habilidades),%20orientação%20sobre%20comportamento%20dos%20alunos,%20dúvidas%20de%20conteúdo%20ou%20apoio%20emocional."
+                width="100%"
+                height="100%"
+                frameborder="0"
+                title="MyakyBot – Powered by Microsoft Copilot"
+                allowfullscreen>
+            </iframe>
+        </div>
+
+        <!-- Removi o input e botão, pois o iframe já tem chat próprio -->
+    </div>
+</div>
+
+<style>
+    #myakybot-container { position: fixed; bottom: 25px; right: 25px; z-index: 9999; }
+    #myakybot-toggle { width: 70px; height: 70px; border-radius: 50%; background: var(--azul-pr); color: white; border: none; cursor: pointer; box-shadow: 0 6px 20px rgba(0,64,128,0.3); transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; }
+    #myakybot-toggle:hover { background: var(--azul-claro); transform: scale(1.1); box-shadow: 0 10px 30px rgba(0,102,204,0.4); }
+    #myakybot-window { position: absolute; bottom: 95px; right: 0; width: 380px; height: 520px; background: white; border-radius: 16px; box-shadow: 0 15px 40px rgba(0,0,0,0.25); overflow: hidden; display: flex; flex-direction: column; transition: all 0.4s ease; opacity: 0; transform: translateY(20px); }
+    #myakybot-window:not(.hidden) { opacity: 1; transform: translateY(0); }
+    .myakybot-header { background: var(--azul-pr); color: white; padding: 1.2rem; display: flex; justify-content: space-between; align-items: center; font-weight: 600; font-size: 1.2rem; }
+    #myakybot-close { background: none; border: none; color: white; font-size: 2rem; cursor: pointer; line-height: 1; }
+    .hidden { display: none !important; }
+</style>
+
+<script>
+    const toggleBtn = document.getElementById('myakybot-toggle');
+    const windowChat = document.getElementById('myakybot-window');
+    const closeBtn = document.getElementById('myakybot-close');
+
+    // Abrir/fechar janela
+    toggleBtn.addEventListener('click', () => {
+        windowChat.classList.toggle('hidden');
+    });
+
+    closeBtn.addEventListener('click', () => {
+        windowChat.classList.add('hidden');
+    });
+</script>
+    <body>
 
     <header>
         <h1>Professores do Paraná</h1>
@@ -70,4 +125,5 @@
     </footer>
 
 </body>
+
 </html>
