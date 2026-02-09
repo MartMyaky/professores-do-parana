@@ -13,8 +13,10 @@
             --verde-sust: #2e7d32;
             --vermelho-pr: #c8102e;
         }
-     
-        body { font-family: 'Segoe UI', sans-serif; background: var(--cinza-claro); color: #333; line-height: 1.6; }
+        
+         
+         
+     body { font-family: 'Segoe UI', sans-serif; background: var(--cinza-claro); color: #333; line-height: 1.6; }
         header { background: linear-gradient(to right, var(--azul-pr), var(--verde-sust)); color: white; text-align: center; padding: 4rem 1rem; }
         header h1 { font-size: 3.5rem; margin-bottom: 0.5rem; }
         nav { background: var(--azul-pr); padding: 1rem; text-align: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
@@ -173,8 +175,75 @@ document.getElementById("msg").addEventListener("keydown", e => {
 
        <p>Colégio Estadual Professor José Carlos Pinotti - Londrina/PR</p>
     </footer>
+<!-- MYAKYBOT -->
+<div id="myakybot" style="
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  width:300px;
+  background:#fff;
+  border-radius:10px;
+  box-shadow:0 4px 12px rgba(0,0,0,.3);
+  font-family:Arial;
+  z-index:9999;
+">
+  <div style="background:#004080;color:#fff;padding:10px;border-radius:10px 10px 0 0;">
+    🤖 MyakyBot
+  </div>
+  <div id="msgs" style="height:200px;overflow:auto;padding:10px;font-size:14px;"></div>
+  <input
+    id="msg"
+    placeholder="Digite aqui..."
+    style="width:100%;padding:10px;border:none;border-top:1px solid #ccc;"
+  />
+</div>
 
+<script>
+/* ===== CRIAR ID DO USUÁRIO ===== */
+let userId = localStorage.getItem("myaky_user");
+if (!userId) {
+  userId = "user_" + Date.now();
+  localStorage.setItem("myaky_user", userId);
+}
+
+/* ===== ENDEREÇO DO BACKEND ===== */
+const API = "https://SEU-LINK.ngrok-free.dev/chat";
+
+/* ===== FUNÇÃO QUE USA FETCH ===== */
+function enviar() {
+  const input = document.getElementById("msg");
+  const texto = input.value.trim();
+  if (!texto) return;
+
+  const msgs = document.getElementById("msgs");
+  msgs.innerHTML += `<div><b>Você:</b> ${texto}</div>`;
+  input.value = "";
+
+  fetch(API, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      message: texto,
+      user_id: userId
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    msgs.innerHTML += `<div><b>MyakyBot:</b> ${data.reply}</div>`;
+    msgs.scrollTop = msgs.scrollHeight;
+  })
+  .catch(() => {
+    msgs.innerHTML += `<div style="color:red">Erro de conexão</div>`;
+  });
+}
+
+/* ===== ENTER PARA ENVIAR ===== */
+document.getElementById("msg").addEventListener("keydown", e => {
+  if (e.key === "Enter") enviar();
+});
+</script>
 </body>
 </html>
+
 
 
