@@ -4,7 +4,69 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Professores do Paraná - MyakyBot & Recursos Educacionais</title>
-    <style>
+    <style>#myaky-widget {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 320px;
+  background: var(--branco);
+  border-radius: 14px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+  overflow: hidden;
+  z-index: 9999;
+  font-size: 0.95rem;
+}
+
+#myaky-header {
+  background: linear-gradient(to right, var(--azul-pr), var(--verde-sust));
+  color: white;
+  padding: 12px;
+  font-weight: bold;
+  text-align: center;
+}
+
+#myaky-msgs {
+  max-height: 240px;
+  overflow-y: auto;
+  padding: 10px;
+  background: #fafafa;
+}
+
+.myaky-user {
+  color: var(--azul-pr);
+  margin: 6px 0;
+}
+
+.myaky-bot {
+  color: var(--verde-sust);
+  margin: 6px 0;
+  font-weight: 600;
+}
+
+#myaky-input-area {
+  display: flex;
+  border-top: 1px solid #ddd;
+}
+
+#myaky-input {
+  flex: 1;
+  border: none;
+  padding: 10px;
+  outline: none;
+}
+
+#myaky-input-area button {
+  border: none;
+  background: var(--azul-pr);
+  color: white;
+  padding: 0 15px;
+  cursor: pointer;
+}
+
+#myaky-input-area button:hover {
+  background: var(--verde-sust);
+}
+    
         :root {
             --azul-pr: #004080;
             --azul-claro: #0066cc;
@@ -100,7 +162,17 @@
 
     <!-- MyakyBot completo – cole aqui -->
     <!-- Cole o código inteiro do MyakyBot abaixo -->
+<div id="myaky-widget">
+  <div id="myaky-header">💬 Myaky Bot</div>
 
+  <div id="myaky-msgs"></div>
+
+  <div id="myaky-input-area">
+    <input id="myaky-input" placeholder="Digite sua dúvida…" />
+    <button onclick="myakySend()">Enviar</button>
+  </div>
+</div>
+    
     <footer>
         <p>© 2026 Professores do Paraná - Feito por alunos e para professores</p>
         <p><strong>Criador principal:</strong> Super (Matheus Rogério Alves Myaky Cenne)</p>
@@ -109,5 +181,6 @@
 
 </body>
 </html>
+
 
 
