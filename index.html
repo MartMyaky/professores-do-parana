@@ -190,16 +190,6 @@ function enviar() {
 
     <!-- MyakyBot completo – cole aqui -->
     <!-- Cole o código inteiro do MyakyBot abaixo -->
-<div id="myaky-widget">
-  <div id="myaky-header">💬 Myaky Bot</div>
-
-  <div id="myaky-msgs"></div>
-
-  <div id="myaky-input-area">
-    <input id="myaky-input" placeholder="Digite sua dúvida…" />
-    <button onclick="myakySend()">Enviar</button>
-  </div>
-</div>
     
     <footer>
         <p>© 2026 Professores do Paraná - Feito por alunos e para professores</p>
@@ -208,22 +198,11 @@ function enviar() {
     </footer>
 
 <script>
-fetch("https://SEU-LINK.ngrok-free.dev/chat", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify({
-    message: texto
-  })
-})
-.then(res => res.json())
-.then(data => {
-  respostaBot(data.reply);
-});
+
 </script>
 </body>
 </html>
+
 
 
 
