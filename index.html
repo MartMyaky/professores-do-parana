@@ -53,75 +53,6 @@
 </head>
 <body>
 <style>
-#myakybot {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  width: 300px;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 6px 20px rgba(0,0,0,.2);
-  font-family: Arial, sans-serif;
-  z-index: 9999;
-}
-#myakybot header {
-  background: #004080;
-  color: white;
-  padding: 10px;
-  border-radius: 12px 12px 0 0;
-  text-align: center;
-  font-weight: bold;
-}
-#myakybot .msgs {
-  height: 200px;
-  overflow-y: auto;
-  padding: 10px;
-  font-size: 14px;
-}
-#myakybot input {
-  width: 100%;
-  border: none;
-  padding: 10px;
-  border-top: 1px solid #ccc;
-}
-</style>
-
-<div id="myakybot">
-  <header>🤖 MyakyBot</header>
-  <div class="msgs" id="msgs"></div>
-  <input id="msg" placeholder="Digite sua pergunta..." />
-</div>
-
-<script>
-const API = "https://claudio-capitative-venally.ngrok-free.dev/chat";
-
-document.getElementById("msg").addEventListener("keydown", e => {
-  if (e.key === "Enter") enviar();
-});
-
-function enviar() {
-  const input = document.getElementById("msg");
-  const texto = input.value.trim();
-  if (!texto) return;
-
-  const msgs = document.getElementById("msgs");
-  msgs.innerHTML += `<div><b>Você:</b> ${texto}</div>`;
-  input.value = "";
-
-  fetch(API, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ message: texto })
-  })
-  .then(r => r.json())
-  .then(d => {
-    msgs.innerHTML += `<div><b>MyakyBot:</b> ${d.reply}</div>`;
-    msgs.scrollTop = msgs.scrollHeight;
-  })
-  .catch(() => {
-    msgs.innerHTML += `<div style="color:red">Erro de conexão</div>`;
-  });
-}
 </script>
 
     <header>
@@ -200,8 +131,76 @@ function enviar() {
 <script>
 
 </script>
+<!-- MYAKYBOT -->
+<div id="myakybot" style="
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  width:300px;
+  background:#fff;
+  border-radius:10px;
+  box-shadow:0 4px 12px rgba(0,0,0,.3);
+  font-family:Arial;
+  z-index:9999;
+">
+  <div style="background:#004080;color:#fff;padding:10px;border-radius:10px 10px 0 0;">
+    🤖 MyakyBot
+  </div>
+  <div id="msgs" style="height:200px;overflow:auto;padding:10px;font-size:14px;"></div>
+  <input
+    id="msg"
+    placeholder="Digite aqui..."
+    style="width:100%;padding:10px;border:none;border-top:1px solid #ccc;"
+  />
+</div>
+
+<script>
+/* ===== CRIAR ID DO USUÁRIO ===== */
+let userId = localStorage.getItem("myaky_user");
+if (!userId) {
+  userId = "user_" + Date.now();
+  localStorage.setItem("myaky_user", userId);
+}
+
+/* ===== ENDEREÇO DO BACKEND ===== */
+const API = "https://claudio-capitative-venally.ngrok-free.dev/chat";
+
+/* ===== FUNÇÃO QUE USA FETCH ===== */
+function enviar() {
+  const input = document.getElementById("msg");
+  const texto = input.value.trim();
+  if (!texto) return;
+
+  const msgs = document.getElementById("msgs");
+  msgs.innerHTML += `<div><b>Você:</b> ${texto}</div>`;
+  input.value = "";
+
+  fetch(API, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      message: texto,
+      user_id: userId
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    msgs.innerHTML += `<div><b>MyakyBot:</b> ${data.reply}</div>`;
+    msgs.scrollTop = msgs.scrollHeight;
+  })
+  .catch(() => {
+    msgs.innerHTML += `<div style="color:red">Erro de conexão</div>`;
+  });
+}
+
+/* ===== ENTER PARA ENVIAR ===== */
+document.getElementById("msg").addEventListener("keydown", e => {
+  if (e.key === "Enter") enviar();
+});
+</script>
 </body>
 </html>
+
 
 
 
