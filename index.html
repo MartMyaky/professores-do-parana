@@ -1,249 +1,275 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Professores do Paraná - MyakyBot & Recursos Educacionais</title>
-    <style>
-        :root {
-            --azul-pr: #004080;
-            --azul-claro: #0066cc;
-            --branco: #ffffff;
-            --cinza-claro: #f4f4f4;
-            --verde-sust: #2e7d32;
-            --vermelho-pr: #c8102e;
-        }
-        
-         
-         
-     body { font-family: 'Segoe UI', sans-serif; background: var(--cinza-claro); color: #333; line-height: 1.6; }
-        header { background: linear-gradient(to right, var(--azul-pr), var(--verde-sust)); color: white; text-align: center; padding: 4rem 1rem; }
-        header h1 { font-size: 3.5rem; margin-bottom: 0.5rem; }
-        nav { background: var(--azul-pr); padding: 1rem; text-align: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
-        nav a { color: white; margin: 0 1rem; text-decoration: none; font-weight: bold; font-size: 1.1rem; }
-        nav a:hover { color: var(--vermelho-pr); }
-        .container { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
-        section { background: white; padding: 2.5rem; margin-bottom: 2rem; border-radius: 12px; box-shadow: 0 6px 20px rgba(0,0,0,0.12); }
-        h2 { color: var(--verde-sust); font-size: 2.4rem; margin-bottom: 1.5rem; text-align: center; }
-        footer { background: var(--azul-pr); color: white; text-align: center; padding: 3rem 1rem; margin-top: 4rem; }
-        footer a { color: var(--azul-claro); text-decoration: none; margin: 0 1rem; }
-        footer a:hover { text-decoration: underline; }
-        @media (max-width: 768px) {
-            header h1 { font-size: 2.5rem; }
-            nav a { margin: 0.6rem; font-size: 1rem; display: block; }
-        }
-    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professores do Paraná - Recursos Educacionais</title>
+    <style>
+        :root {
+            --azul-pr: #004080;
+            --azul-claro: #0066cc;
+            --verde-sust: #2e7d32;
+            --vermelho-pr: #c8102e;
+            --cinza-claro: #f4f4f4;
+            --branco: #ffffff;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', sans-serif; 
+            background: var(--cinza-claro); 
+            color: #333; 
+            line-height: 1.6; 
+            margin: 0; 
+        }
+        header { 
+            background: linear-gradient(to right, var(--azul-pr), var(--verde-sust)); 
+            color: white; 
+            text-align: center; 
+            padding: 2.5rem 1rem; 
+        }
+        header h1 { font-size: clamp(2rem, 8vw, 3rem); margin-bottom: 0.5rem; }
+        header p { font-size: clamp(1rem, 4vw, 1.4rem); max-width: 90%; margin: 0 auto; }
+
+        /* Menu mobile-friendly */
+        nav { 
+            background: var(--azul-pr); 
+            padding: 1rem; 
+            position: sticky; 
+            top: 0; 
+            z-index: 1000; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2); 
+        }
+        .nav-container { 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+        }
+        .menu-icon { 
+            font-size: 2rem; 
+            cursor: pointer; 
+            color: white; 
+            display: none; 
+        }
+        .nav-links { 
+            display: flex; 
+            gap: 1.5rem; 
+            list-style: none; 
+        }
+        .nav-links a { 
+            color: white; 
+            text-decoration: none; 
+            font-weight: bold; 
+            font-size: clamp(0.95rem, 3vw, 1.1rem); 
+        }
+        .nav-links a:hover { color: var(--vermelho-pr); }
+
+        .container { 
+            max-width: 1100px; 
+            margin: 2rem auto; 
+            padding: 0 1rem; 
+        }
+        section { 
+            background: white; 
+            padding: 2rem; 
+            margin-bottom: 2rem; 
+            border-radius: 12px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
+        }
+        h2 { 
+            color: var(--verde-sust); 
+            font-size: clamp(1.8rem, 6vw, 2.4rem); 
+            text-align: center; 
+            margin-bottom: 1.5rem; 
+        }
+        .cards { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+            gap: 1.5rem; 
+            margin-top: 2rem; 
+        }
+        .card { 
+            background: var(--cinza-claro); 
+            padding: 1.5rem; 
+            border-radius: 12px; 
+            text-align: center; 
+            transition: transform 0.3s; 
+        }
+        .card:hover { transform: translateY(-5px); }
+        footer { 
+            background: var(--azul-pr); 
+            color: white; 
+            text-align: center; 
+            padding: 2.5rem 1rem; 
+            margin-top: 4rem; 
+        }
+        footer a { color: var(--azul-claro); text-decoration: none; margin: 0 0.8rem; }
+
+        /* Mobile adjustments */
+        @media (max-width: 768px) {
+            .menu-icon { display: block; }
+            .nav-links { 
+                display: none; 
+                flex-direction: column; 
+                background: var(--azul-pr); 
+                position: absolute; 
+                top: 100%; 
+                left: 0; 
+                width: 100%; 
+                padding: 1rem 0; 
+            }
+            .nav-links.active { display: flex; }
+            .nav-links a { margin: 1rem 0; font-size: 1.2rem; text-align: center; }
+            .container { padding: 0 0.8rem; }
+            section { padding: 1.5rem; }
+        }
+    </style>
 </head>
 <body>
 
-    <header>
-        <h1>Professores do Paraná</h1>
-        <p>Recursos educacionais, MyakyBot, BNCC, inclusão, IA na sala de aula e muito mais – tudo gratuito!</p>
-        <p>este site foi criado por um unico aluno em 3semanas e 5dias nome do aluno matheus rogerio alves myaky cenne aluno do ensino medio</p>
-    </header>
+    <header>
+        <h1>Professores do Paraná</h1>
+        <p>Recursos gratuitos, planos de aula, dicas de inclusão, tecnologia educacional, saúde mental docente e muito mais – tudo feito pensando na realidade da sala de aula paranaense.</p>
+    </header>
 
-    <nav>
-        <a href="index.html">Início</a>
-        <a href="calendario.html">Calendário 2026</a>
-        <a href="ia-geral.html">IA Geral</a>
-        <a href="assistentes.html">Assistentes IA</a>
-        <a href="bncc.html">Recursos BNCC</a>
-        <a href="planos-bncc.html">Planos BNCC</a>
-        <a href="inclusao.html">Inclusão</a>
-        <a href="google-classroom-ia.html">Google Classroom + IA</a>
-        <a href="tutoriais-ia.html">Tutoriais IA</a>
-        <a href="educacao-financeira-sustentavel.html">Educação Financeira Sustentável</a>
-        <a href="recursos-gratuitos.html">Recursos Gratuitos</a>
-        <a href="projetos-interdisciplinares.html">Projetos Interdisciplinares</a>
-        <a href="saude-mental-professor.html">Saúde Mental do Professor</a>
-        <a href="avaliacao-formativa.html">Avaliação Formativa</a>
-        <a href="recuperacao-paralela.html">Recuperação Paralela</a>
-        <a href="tecnologia-na-sala.html">Tecnologia na Sala</a>
-        <a href="atualidades-2026.html">Atualidades 2026</a>
-        <a href="carreira-docente.html">Carreira Docente</a>
-        <a href="ods-na-escola.html">ODS na Escola</a>
-        <a href="dicas-para-professor-iniciante.html">Professor Iniciante</a>
-        <a href="contato.html">Contato</a>
-    </nav>
+    <nav>
+        <div class="nav-container">
+            <div class="menu-icon" onclick="toggleMenu()">☰</div>
+            <ul class="nav-links" id="navMenu">
+                <li><a href="index.html">Início</a></li>
+                <li><a href="calendario.html">Calendário 2026</a></li>
+                <li><a href="ia-geral.html">IA Geral</a></li>
+                <li><a href="assistentes.html">Assistentes IA</a></li>
+                <li><a href="bncc.html">Recursos BNCC</a></li>
+                <li><a href="planos-bncc.html">Planos BNCC</a></li>
+                <li><a href="inclusao.html">Inclusão</a></li>
+                <li><a href="google-classroom-ia.html">Google Classroom + IA</a></li>
+                <li><a href="tutoriais-ia.html">Tutoriais IA</a></li>
+                <li><a href="educacao-financeira-sustentavel.html">Educação Financeira Sustentável</a></li>
+                <li><a href="ods-na-escola.html">ODS na Escola</a></li>
+                <li><a href="recursos-gratuitos.html">Recursos Gratuitos</a></li>
+                <li><a href="projetos-interdisciplinares.html">Projetos Interdisciplinares</a></li>
+                <li><a href="saude-mental-professor.html">Saúde Mental do Professor</a></li>
+                <li><a href="avaliacao-formativa.html">Avaliação Formativa</a></li>
+                <li><a href="recuperacao-paralela.html">Recuperação Paralela</a></li>
+                <li><a href="tecnologia-na-sala.html">Tecnologia na Sala</a></li>
+                <li><a href="atualidades-2026.html">Atualidades 2026</a></li>
+                <li><a href="carreira-docente.html">Carreira Docente</a></li>
+                <li><a href="dicas-para-professor-iniciante.html">Professor Iniciante</a></li>
+                <li><a href="contato.html">Contato</a></li>
+            </ul>
+        </div>
+    </nav>
 
-    <div class="container">
-        <section>
-            <h2>Bem-vindo ao portal dos Professores do Paraná</h2>
-            <p style="font-size: 1.3rem; text-align: center;">
-                Aqui você encontra ferramentas, planos de aula, recursos BNCC, dicas de inclusão, tutoriais de IA, saúde mental docente, projetos prontos e o MyakyBot – seu assistente pessoal no canto da tela.
-            </p>
-            <p style="text-align: center; margin: 2rem 0; font-size: 1.4rem; font-weight: bold; color: var(--verde-sust);">
-                Tudo criado por um unico aluno, para professores com amor
-            </p>
-        </section>
+    <div class="container">
+        <section>
+            <h2>Bem-vindo ao portal dos Professores do Paraná</h2>
+            <p style="font-size: 1.3rem; text-align: center;">
+                Aqui você encontra tudo que precisa para o dia a dia na sala de aula: planos alinhados à BNCC, dicas de inclusão, projetos prontos, ferramentas de IA gratuitas, apoio à saúde mental docente, calendário escolar, atualidades 2026 e muito mais.
+            </p>
+            <p style="text-align: center; font-weight: bold; font-size: 1.4rem; color: var(--verde-sust); margin-top: 1.5rem;">
+                Feito por alunos e professores, para professores e alunos.
+            </p>
+        </section>
 
-        <section>
-            <h2>O que você encontra aqui?</h2>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 2rem;">
-                <div style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
-                    <h3>IA na Educação</h3>
-                    <p>Tutoriais, assistentes prontos, MyakyBot e como usar IA sem complicação.</p>
-                </div>
-                <div style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
-                    <h3>Recursos BNCC</h3>
-                    <p>Planos de aula alinhados, competências, sequências didáticas e materiais prontos.</p>
-                </div>
-                <div style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
-                    <h3>Inclusão e Diversidade</h3>
-                    <p>Dicas para TDAH, TEA, dislexia, altas habilidades e educação inclusiva.</p>
-                </div>
-                <div style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
-                    <h3>Saúde Mental</h3>
-                    <p>Como lidar com burnout, estresse e manter o equilíbrio na profissão.</p>
-                </div>
-            </div>
-        </section>
-    </div>
-<script defer>
-<!-- MYAKYBOT -->
-<div id="myakybot" style="
-  position:fixed;
-  bottom:20px;
-  right:20px;
-  width:300px;
-  background:#fff;
-  border-radius:10px;
-  box-shadow:0 4px 12px rgba(0,0,0,.3);
-  font-family:Arial;
-  z-index:9999;
-">
-  <div style="background:#004080;color:#fff;padding:10px;border-radius:10px 10px 0 0;">
-    🤖 MyakyBot
-  </div>
-  <div id="msgs" style="height:200px;overflow:auto;padding:10px;font-size:14px;"></div>
-  <input
-    id="msg"
-    placeholder="Digite aqui..."
-    style="width:100%;padding:10px;border:none;border-top:1px solid #ccc;"
-  />
-</div>
+        <section>
+            <h2>Principais seções do site</h2>
+            <div class="cards">
+                <div class="card">
+                    <h3>IA na Educação</h3>
+                    <p>Tutoriais, assistentes e como usar IA sem complicação.</p>
+                </div>
+                <div class="card">
+                    <h3>Recursos BNCC</h3>
+                    <p>Planos alinhados, competências e sequências didáticas.</p>
+                </div>
+                <div class="card">
+                    <h3>Inclusão</h3>
+                    <p>Estratégias para TDAH, TEA, dislexia e mais.</p>
+                </div>
+                <div class="card">
+                    <h3>Saúde Mental</h3>
+                    <p>Dicas contra burnout e estresse docente.</p>
+                </div>
+            </div>
+        </section>
+    </div>
 
-<script>
-/* ===== CRIAR ID DO USUÁRIO ===== */
-let userId = localStorage.getItem("myaky_user");
-if (!userId) {
-  userId = "user_" + Date.now();
-  localStorage.setItem("myaky_user", userId);
-}
+    <!-- MYAKYBOT - adicionado exatamente como você enviou -->
+    <div id="myakybot" style="
+      position:fixed;
+      bottom:20px;
+      right:20px;
+      width:300px;
+      background:#fff;
+      border-radius:10px;
+      box-shadow:0 4px 12px rgba(0,0,0,.3);
+      font-family:Arial;
+      z-index:9999;
+    ">
+      <div style="background:#004080;color:#fff;padding:10px;border-radius:10px 10px 0 0;">
+        🤖 MyakyBot
+      </div>
+      <div id="msgs" style="height:200px;overflow:auto;padding:10px;font-size:14px;"></div>
+      <input
+        id="msg"
+        placeholder="Digite aqui..."
+        style="width:100%;padding:10px;border:none;border-top:1px solid #ccc;"
+      />
+    </div>
 
-/* ===== ENDEREÇO DO BACKEND ===== */
-const API = "https://SEU-LINK.ngrok-free.dev/chat";
+    <script>
+    /* ===== CRIAR ID DO USUÁRIO ===== */
+    let userId = localStorage.getItem("myaky_user");
+    if (!userId) {
+      userId = "user_" + Date.now();
+      localStorage.setItem("myaky_user", userId);
+    }
+    /* ===== ENDEREÇO DO BACKEND ===== */
+    const API = "https://SEU-LINK.ngrok-free.dev/chat";
+    /* ===== FUNÇÃO QUE USA FETCH ===== */
+    function enviar() {
+      const input = document.getElementById("msg");
+      const texto = input.value.trim();
+      if (!texto) return;
+      const msgs = document.getElementById("msgs");
+      msgs.innerHTML += `<div><b>Você:</b> ${texto}</div>`;
+      input.value = "";
+      fetch(API, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          message: texto,
+          user_id: userId
+        })
+      })
+      .then(res => res.json())
+      .then(data => {
+        msgs.innerHTML += `<div><b>MyakyBot:</b> ${data.reply}</div>`;
+        msgs.scrollTop = msgs.scrollHeight;
+      })
+      .catch(() => {
+        msgs.innerHTML += `<div style="color:red">Erro de conexão</div>`;
+      });
+    }
+    /* ===== ENTER PARA ENVIAR ===== */
+    document.getElementById("msg").addEventListener("keydown", e => {
+      if (e.key === "Enter") enviar();
+    });
+    </script>
 
-/* ===== FUNÇÃO QUE USA FETCH ===== */
-function enviar() {
-  const input = document.getElementById("msg");
-  const texto = input.value.trim();
-  if (!texto) return;
+    <script>
+        function toggleMenu() {
+            document.getElementById('navMenu').classList.toggle('active');
+        }
+    </script>
 
-  const msgs = document.getElementById("msgs");
-  msgs.innerHTML += `<div><b>Você:</b> ${texto}</div>`;
-  input.value = "";
+    <footer>
+        <p>© 2026 Professores do Paraná - Feito com carinho por alunos e para professores</p>
+        <p><strong>Criador:</strong> Super (Matheus Rogério Alves Myaky Cenne)</p>
+        <p>Colégio Estadual Professor José Carlos Pinotti - Londrina/PR</p>
+    </footer>
 
-  fetch(API, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      message: texto,
-      user_id: userId
-    })
-  })
-  .then(res => res.json())
-  .then(data => {
-    msgs.innerHTML += `<div><b>MyakyBot:</b> ${data.reply}</div>`;
-    msgs.scrollTop = msgs.scrollHeight;
-  })
-  .catch(() => {
-    msgs.innerHTML += `<div style="color:red">Erro de conexão</div>`;
-  });
-}
-
-/* ===== ENTER PARA ENVIAR ===== */
-document.getElementById("msg").addEventListener("keydown", e => {
-  if (e.key === "Enter") enviar();
-});
-</script>
-
-    <footer>
-        <p>© 2026 Professores do Paraná - Feito por alunos e para professores</p>
-        <p><strong>Criador principal:</strong> Super (Matheus Rogério Alves Myaky Cenne)</p>
- 
-
-       <p>Colégio Estadual Professor José Carlos Pinotti - Londrina/PR</p>
-    </footer>
-<!-- MYAKYBOT -->
-<div id="myakybot" style="
-  position:fixed;
-  bottom:20px;
-  right:20px;
-  width:300px;
-  background:#fff;
-  border-radius:10px;
-  box-shadow:0 4px 12px rgba(0,0,0,.3);
-  font-family:Arial;
-  z-index:9999;
-">
-  <div style="background:#004080;color:#fff;padding:10px;border-radius:10px 10px 0 0;">
-    🤖 MyakyBot
-  </div>
-  <div id="msgs" style="height:200px;overflow:auto;padding:10px;font-size:14px;"></div>
-  <input
-    id="msg"
-    placeholder="Digite aqui..."
-    style="width:100%;padding:10px;border:none;border-top:1px solid #ccc;"
-  />
-</div>
-
-<script>
-/* ===== CRIAR ID DO USUÁRIO ===== */
-let userId = localStorage.getItem("myaky_user");
-if (!userId) {
-  userId = "user_" + Date.now();
-  localStorage.setItem("myaky_user", userId);
-}
-
-/* ===== ENDEREÇO DO BACKEND ===== */
-const API = "https://SEU-LINK.ngrok-free.dev/chat";
-
-/* ===== FUNÇÃO QUE USA FETCH ===== */
-function enviar() {
-  const input = document.getElementById("msg");
-  const texto = input.value.trim();
-  if (!texto) return;
-
-  const msgs = document.getElementById("msgs");
-  msgs.innerHTML += `<div><b>Você:</b> ${texto}</div>`;
-  input.value = "";
-
-  fetch(API, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      message: texto,
-      user_id: userId
-    })
-  })
-  .then(res => res.json())
-  .then(data => {
-    msgs.innerHTML += `<div><b>MyakyBot:</b> ${data.reply}</div>`;
-    msgs.scrollTop = msgs.scrollHeight;
-  })
-  .catch(() => {
-    msgs.innerHTML += `<div style="color:red">Erro de conexão</div>`;
-  });
-}
-
-/* ===== ENTER PARA ENVIAR ===== */
-document.getElementById("msg").addEventListener("keydown", e => {
-  if (e.key === "Enter") enviar();
-});
-</script>
 </body>
 </html>
-
-
-
