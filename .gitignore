@@ -1,0 +1,31 @@
+# Node.js
+node_modules/
+
+# Environment Variables
+.env
+.env.local
+.env.*.local
+
+# Logs
+npm-debug.log
+
+# Dependency directories
+bower_components/
+
+# Optional npm cache directory
+.npm
+
+# Next.js build output
+.next/
+
+# Nuxt.js build output
+.nuxt/
+
+# Yarn Integrity file
+yarn-integrity
+
+# Static estate
+out/
+
+# Storybook build output
+out-storybook/
