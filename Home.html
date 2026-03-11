@@ -1,130 +1,275 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17981574632"></script>
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'AW-17981574632');
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'AW-17981574632');
 </script>
-    <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Professores do Paraná - MyakyBot & Recursos Educacionais </title>
-    <style>
-        :root {
-            --azul-pr: #004080;
-            --azul-claro: #0066cc;
-            --branco: #ffffff;
-            --cinza-claro: #f4f4f4;
-            --verde-sust: #2e7d32;
-            --vermelho-pr: #c8102e;
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--cinza-claro); color: #333; line-height: 1.6; }
-        header { background: linear-gradient(to right, var(--azul-pr), var(--verde-sust)); color: white; text-align: center; padding: 4rem 1rem; }
-        header h1 { font-size: 3.5rem; margin-bottom: 0.5rem; }
-        nav { background: var(--azul-pr); padding: 1rem; text-align: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
-        nav a { color: white; margin: 0 1rem; text-decoration: none; font-weight: bold; font-size: 1.1rem; }
-        nav a:hover { color: var(--vermelho-pr); }
-        .container { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
-        section { background: white; padding: 2.5rem; margin-bottom: 2rem; border-radius: 12px; box-shadow: 0 6px 20px rgba(0,0,0,0.12); }
-        h2 { color: var(--verde-sust); font-size: 2.4rem; margin-bottom: 1.5rem; text-align: center; }
-        footer { background: var(--azul-pr); color: white; text-align: center; padding: 3rem 1rem; margin-top: 4rem; }
-        footer a { color: var(--azul-claro); text-decoration: none; margin: 0 1rem; }
-        footer a:hover { text-decoration: underline; }
-        @media (max-width: 768px) {
-            header h1 { font-size: 2.5rem; }
-            nav a { margin: 0.6rem; font-size: 1rem; display: block; }
-        }
-    </style>
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Professores do Paraná - MyakyBot & Recursos Educacionais</title>
+
+<style>
+
+:root{
+--azul-pr:#004080;
+--azul-claro:#0066cc;
+--branco:#ffffff;
+--cinza-claro:#f4f4f4;
+--verde-sust:#2e7d32;
+--vermelho-pr:#c8102e;
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+font-family:'Segoe UI',sans-serif;
+background:var(--cinza-claro);
+color:#333;
+line-height:1.6;
+}
+
+header{
+background:linear-gradient(to right,var(--azul-pr),var(--verde-sust));
+color:white;
+text-align:center;
+padding:4rem 1rem;
+}
+
+header h1{
+font-size:3.5rem;
+margin-bottom:.5rem;
+}
+
+nav{
+background:var(--azul-pr);
+padding:1rem;
+text-align:center;
+position:sticky;
+top:0;
+z-index:100;
+box-shadow:0 2px 10px rgba(0,0,0,.2);
+}
+
+nav a{
+color:white;
+margin:0 1rem;
+text-decoration:none;
+font-weight:bold;
+font-size:1.1rem;
+}
+
+nav a:hover{
+color:var(--vermelho-pr);
+}
+
+.container{
+max-width:1200px;
+margin:2rem auto;
+padding:0 1rem;
+}
+
+section{
+background:white;
+padding:2.5rem;
+margin-bottom:2rem;
+border-radius:12px;
+box-shadow:0 6px 20px rgba(0,0,0,.12);
+}
+
+h2{
+color:var(--verde-sust);
+font-size:2.4rem;
+margin-bottom:1.5rem;
+text-align:center;
+}
+
+.pagebtn{
+display:block;
+background:linear-gradient(135deg,#0066cc,#2e7d32);
+color:white;
+padding:14px;
+text-align:center;
+border-radius:10px;
+text-decoration:none;
+font-weight:bold;
+transition:.3s;
+box-shadow:0 4px 10px rgba(0,0,0,.15);
+}
+
+.pagebtn:hover{
+transform:scale(1.05);
+background:linear-gradient(135deg,#004080,#1b5e20);
+}
+
+footer{
+background:var(--azul-pr);
+color:white;
+text-align:center;
+padding:3rem 1rem;
+margin-top:4rem;
+}
+
+footer a{
+color:var(--azul-claro);
+text-decoration:none;
+margin:0 1rem;
+}
+
+footer a:hover{
+text-decoration:underline;
+}
+
+@media (max-width:768px){
+
+header h1{
+font-size:2.5rem;
+}
+
+nav a{
+margin:.6rem;
+font-size:1rem;
+display:block;
+}
+
+}
+
+</style>
 </head>
-<!-- Elfsight AI Chatbot | Untitled AI Chatbot -->
+
+<!-- Elfsight AI Chatbot -->
 <script src="https://elfsightcdn.com/platform.js" async></script>
-<div class="elfsight-app-c1493437-ddbc-49dd-a018-0731b6b5014b" data-elfsight-app-lazy></div><body>
+<div class="elfsight-app-c1493437-ddbc-49dd-a018-0731b6b5014b" data-elfsight-app-lazy></div>
 
-    <header>
-        <h1>Professores do Paraná</h1>
-        <p>Recursos educacionais, MyakyBot, BNCC, inclusão, IA na sala de aula e muito mais – tudo gratuito!</p>
-        <p>este site foi criado por um unico aluno em 3semanas e 5dias nome do aluno matheus rogerio alves myaky cenne aluno do ensino medio e se puder ajudar a manter o site clicle em doar pix</p>
-    </header>
+<body>
 
-    <nav>
-        <a href="doar.html" style="font-weight:700">💛 Doar (PIX)</a>
-        <a href="index.html">Início</a>
-        <a href="calendario.html">Calendário 2026</a>
-        <a href="ia-geral.html">IA Geral</a>
-        <a href="assistentes.html">Assistentes IA</a>
-        <a href="bncc.html">Recursos BNCC</a>
-        <a href="planos-bncc.html">Planos BNCC</a>
-        <a href="inclusao.html">Inclusão</a>
-        <a href="google-classroom-ia.html">Google Classroom + IA</a>
-        <a href="tutoriais-ia.html">Tutoriais IA</a>
-        <a href="educacao-financeira-sustentavel.html">Educação Financeira Sustentável</a>
-        <a href="recursos-gratuitos.html">Recursos Gratuitos</a>
-        <a href="projetos-interdisciplinares.html">Projetos Interdisciplinares</a>
-        <a href="saude-mental-professor.html">Saúde Mental do Professor</a>
-        <a href="avaliacao-formativa.html">Avaliação Formativa</a>
-        <a href="recuperacao-paralela.html">Recuperação Paralela</a>
-        <a href="tecnologia-na-sala.html">Tecnologia na Sala</a>
-        <a href="atualidades-2026.html">Atualidades 2026</a>
-        <a href="carreira-docente.html">Carreira Docente</a>
-        <a href="ods-na-escola.html">ODS na Escola</a>
-        <a href="dicas-para-professor-iniciante.html">Professor Iniciante</a>
-        <a href="contato.html">Contato</a>
-    </nav>
+<header>
 
-    <div class="container">
-        <section>
-            <h2>Bem-vindo ao portal dos Professores do Paraná</h2>
-            <p style="font-size: 1.3rem; text-align: center;">
-                Aqui você encontra ferramentas, planos de aula, recursos BNCC, dicas de inclusão, tutoriais de IA, saúde mental docente, projetos prontos e o MyakyBot – seu assistente pessoal no canto da tela.
-            </p>
-            <p style="text-align: center; margin: 2rem 0; font-size: 1.4rem; font-weight: bold; color: var(--verde-sust);">
-                Tudo criado por um unico aluno, para professores com amor
-            </p>
-        </section>
+<h1>Professores do Paraná</h1>
 
-        <section>
-            <h2>O que você encontra aqui?</h2>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 2rem;">
-                <div style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
-                    <h3>IA na Educação</h3>
-                    <p>Tutoriais, assistentes prontos, MyakyBot e como usar IA sem complicação.</p>
-                </div>
-                <div style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
-                    <h3>Recursos BNCC</h3>
-                    <p>Planos de aula alinhados, competências, sequências didáticas e materiais prontos.</p>
-                </div>
-                <div style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
-                    <h3>Inclusão e Diversidade</h3>
-                    <p>Dicas para TDAH, TEA, dislexia, altas habilidades e educação inclusiva.</p>
-                </div>
-                <div style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
-                    <h3>Saúde Mental</h3>
-                    <p>Como lidar com burnout, estresse e manter o equilíbrio na profissão.</p>
-                </div>
-            </div>
-        </section>
-    </div>
+<p>
+Recursos educacionais, MyakyBot, BNCC, inclusão, IA na sala de aula e muito mais – tudo gratuito!
+</p>
 
-    <!-- MyakyBot completo – cole aqui -->
-    <!-- Cole o código inteiro do MyakyBot abaixo -->
+<p>
+Este site foi criado por um único aluno em 3 semanas e 5 dias.
+Nome do aluno: Matheus Rogério Alves Myaky Cenne.
+Se puder ajudar a manter o site, clique em doar PIX.
+</p>
 
-    <footer>
-        <p>© 2026 Professores do Paraná - Feito por alunos e para professores</p>
-        <p><strong>Criador principal:</strong> Super (Matheus Rogério Alves Myaky Cenne)</p>
-        <p>Colégio Estadual Professor José Carlos Pinotti - Londrina/PR</p>
-    </footer>
+</header>
+
+<nav>
+
+<a href="doar.html">💛 Doar</a>
+<a href="index.html">Início</a>
+<a href="calendario.html">Calendário</a>
+<a href="ia-geral.html">IA</a>
+<a href="assistentes.html">Assistentes</a>
+<a href="bncc.html">BNCC</a>
+<a href="planos-bncc.html">Planos</a>
+<a href="inclusao.html">Inclusão</a>
+<a href="recursos-gratuitos.html">Recursos</a>
+<a href="contato.html">Contato</a>
+
+</nav>
+
+<div class="container">
+
+<section>
+
+<h2>Bem-vindo ao portal dos Professores do Paraná</h2>
+
+<p style="font-size:1.3rem;text-align:center">
+
+Aqui você encontra ferramentas, planos de aula, recursos BNCC,
+dicas de inclusão, tutoriais de IA, saúde mental docente,
+projetos prontos e o MyakyBot.
+
+</p>
+
+<p style="text-align:center;margin:2rem 0;font-size:1.4rem;font-weight:bold;color:var(--verde-sust)">
+
+Tudo criado por um único aluno, para professores com amor.
+
+</p>
+
+</section>
+
+<section>
+
+<h2>📚 Biblioteca Completa do Portal</h2>
+
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px">
+
+<a href="Minha musica.html" class="pagebtn">🎵 Minha Música</a>
+<a href="Mini impact v2.html" class="pagebtn">⚔️ Mini Impact v2</a>
+
+<a href="ODS na Escola.html" class="pagebtn">🌍 ODS na Escola</a>
+<a href="Recursos BNCC.html" class="pagebtn">📘 Recursos BNCC</a>
+
+<a href="Saude mental.html" class="pagebtn">🧠 Saúde Mental</a>
+<a href="Tempo-livre.html" class="pagebtn">🎮 Tempo Livre</a>
+
+<a href="assistentes.html" class="pagebtn">🤖 Assistentes IA</a>
+<a href="atualidades-2026.html" class="pagebtn">📰 Atualidades 2026</a>
+
+<a href="avaliacao-formativa.html" class="pagebtn">📊 Avaliação Formativa</a>
+<a href="calendario.html" class="pagebtn">📅 Calendário</a>
+
+<a href="carreira-docente.html" class="pagebtn">👩‍🏫 Carreira Docente</a>
+<a href="dicas-para-professor-iniciante.html" class="pagebtn">📚 Professor Iniciante</a>
+
+<a href="doar.html" class="pagebtn">💛 Apoiar o Projeto</a>
+<a href="docs.html" class="pagebtn">📝 Editor Docs</a>
+
+<a href="google-classroom-ia.html" class="pagebtn">🏫 Classroom + IA</a>
+<a href="ia-chat.html" class="pagebtn">💬 IA Chat</a>
+
+<a href="ia-geral.html" class="pagebtn">🧠 IA Geral</a>
+<a href="inclusao.html" class="pagebtn">♿ Inclusão</a>
+
+<a href="planos-bncc.html" class="pagebtn">📑 Planos BNCC</a>
+<a href="profeFlix.html" class="pagebtn">🎬 ProfeFlix</a>
+
+<a href="projetos-interdisciplinares.html" class="pagebtn">🔬 Projetos</a>
+<a href="recuperacao-paralela.html" class="pagebtn">📖 Recuperação</a>
+
+<a href="recursos-gratuitos.html" class="pagebtn">🧰 Recursos Gratuitos</a>
+<a href="saude-mental-professor.html" class="pagebtn">❤️ Saúde do Professor</a>
+
+<a href="tutoriais-ia.html" class="pagebtn">📖 Tutoriais IA</a>
+
+</div>
+
+</section>
+
+</div>
+
+<footer>
+
+<p>© 2026 Professores do Paraná</p>
+
+<p>
+Criador principal: Matheus Rogério Alves Myaky Cenne
+</p>
+
+<p>
+Colégio Estadual Professor José Carlos Pinotti – Londrina / PR
+</p>
+
+</footer>
 
 </body>
 </html>
-
-
-
-
-
-
-
