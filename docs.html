@@ -760,6 +760,7 @@ x⁻¹</div>
             <button onclick="formatar('justifyLeft')">Esquerda</button>
             <button onclick="formatar('justifyCenter')">Centro</button>
             <button onclick="formatar('justifyRight')">Direita</button>
+            <button onclick="formatar('superscript')">~ expoente</button>
             <button onclick="inserirSimbolo('²')">x²</button>
             <button onclick="inserirSimbolo('³')">x³</button>
             <button onclick="inserirSimbolo('⁻¹')">x⁻¹</button>
@@ -884,6 +885,28 @@ x⁻¹</div>
         }
       });
     }, { threshold: 0.3 });
+
+    // Converter automaticamente 10~3 -> 10³
+    const supMap = {"0":"⁰","1":"¹","2":"²","3":"³","4":"⁴","5":"⁵","6":"⁶","7":"⁷","8":"⁸","9":"⁹","-":"⁻"};
+    const docArea = document.getElementById('docArea');
+    docArea.addEventListener('keyup', () => {
+      let txt = docArea.innerText;
+      const regex = /(\d+)~(-?\d+)/g;
+      txt = txt.replace(regex, (m, base, exp) => {
+        let sup="";
+        for (let c of exp) sup += supMap[c] || c;
+        return base + sup;
+      });
+      if (txt !== docArea.innerText) {
+        docArea.innerText = txt;
+        const range = document.createRange();
+        const sel = window.getSelection();
+        range.selectNodeContents(docArea);
+        range.collapse(false);
+        sel.removeAllRanges();
+        sel.addRange(range);
+      }
+    });
 
     document.querySelectorAll('section[id]').forEach(sec => observer.observe(sec));
   </script>
