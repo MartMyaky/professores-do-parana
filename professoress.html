@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+
+<meta charset="UTF-8">
+<title>Portal Professores do Paraná</title>
+
+<style>
+
+body{
+font-family:Arial;
+margin:0;
+background:#eef2ff;
+}
+
+header{
+background:#0d47a1;
+color:white;
+text-align:center;
+padding:25px;
+}
+
+nav{
+background:#1976d2;
+padding:10px;
+text-align:center;
+position:sticky;
+top:0;
+}
+
+nav a{
+color:white;
+margin:8px;
+text-decoration:none;
+font-weight:bold;
+}
+
+section{
+padding:40px;
+border-bottom:2px solid #ddd;
+background:white;
+margin:20px;
+border-radius:10px;
+}
+
+h1{
+color:#0d47a1;
+}
+
+button{
+background:#1976d2;
+color:white;
+border:none;
+padding:10px;
+border-radius:6px;
+cursor:pointer;
+}
+
+textarea{
+width:100%;
+max-width:600px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<h1>Portal Professores do Paraná</h1>
+<p>Ferramentas pedagógicas e recursos educacionais</p>
+
+</header>
+
+<nav>
+
+<a href="#planos">Planos</a>
+<a href="#provas">Provas</a>
+<a href="#atividades">Atividades</a>
+<a href="#jogos">Jogos</a>
+<a href="#videos">Vídeos</a>
+<a href="#biblioteca">Biblioteca</a>
+<a href="#calculadora">Calculadora</a>
+<a href="#graficos">Gráficos</a>
+<a href="#certificados">Certificados</a>
+<a href="#quiz">Quiz</a>
+<a href="#caca">Caça-palavras</a>
+<a href="#mapas">Mapas</a>
+<a href="#laboratorio">Laboratório</a>
+<a href="#projetos">Projetos</a>
+<a href="#enem">ENEM</a>
+<a href="#noticias">Notícias</a>
+<a href="#planejador">Planejador</a>
+<a href="#editor">Editor</a>
+<a href="#slides">Slides</a>
+<a href="#comunidade">Comunidade</a>
+<a href="#myakybot">Myaky Bot</a>
+
+</nav>
+
+<!-- PLANOS -->
+
+<section id="planos">
+
+<h1>Planos de Aula</h1>
+
+<ul>
+<li>Matemática – Frações</li>
+<li>Português – Interpretação</li>
+<li>História – Brasil Colônia</li>
+<li>Geografia – Biomas</li>
+<li>Ciências – Sistema Solar</li>
+</ul>
+
+</section>
+
+<!-- PROVAS -->
+
+<section id="provas">
+
+<h1>Gerador de Provas</h1>
+
+Disciplina <input><br><br>
+Tema <input><br><br>
+Questões <input type="number"><br><br>
+
+<button onclick="alert('Prova criada!')">Gerar Prova</button>
+
+</section>
+
+<!-- ATIVIDADES -->
+
+<section id="atividades">
+
+<h1>Gerador de Atividades</h1>
+
+Tema <input><br><br>
+Série <input><br><br>
+
+<button onclick="alert('Atividade criada')">Gerar</button>
+
+</section>
+
+<!-- JOGOS -->
+
+<section id="jogos">
+
+<h1>Jogos Educativos</h1>
+
+<ul>
+<li>Quiz Matemática</li>
+<li>Tabuada</li>
+<li>Caça-palavras</li>
+<li>Geografia Brasil</li>
+</ul>
+
+</section>
+
+<!-- VIDEOS -->
+
+<section id="videos">
+
+<h1>Vídeos Educativos</h1>
+
+<iframe width="560" height="315"
+src="https://www.youtube.com/embed/hfz4uDuicaQ"
+allowfullscreen>
+</iframe>
+
+</section>
+
+<!-- BIBLIOTECA -->
+
+<section id="biblioteca">
+
+<h1>Biblioteca de Materiais</h1>
+
+<ul>
+<li>Apostila Matemática</li>
+<li>Apostila Português</li>
+<li>Apostila Ciências</li>
+<li>Apostila História</li>
+</ul>
+
+</section>
+
+<!-- CALCULADORA -->
+
+<section id="calculadora">
+
+<h1>Calculadora</h1>
+
+<input id="a"> +
+<input id="b">
+
+<button onclick="
+document.getElementById('r').innerText=
+Number(a.value)+Number(b.value)
+">Calcular</button>
+
+<h2 id="r"></h2>
+
+</section>
+
+<!-- GRAFICOS -->
+
+<section id="graficos">
+
+<h1>Criador de Gráficos</h1>
+
+<canvas width="500" height="300" style="border:1px solid black"></canvas>
+
+</section>
+
+<!-- CERTIFICADOS -->
+
+<section id="certificados">
+
+<h1>Gerador de Certificados</h1>
+
+Nome <input><br><br>
+
+<button onclick="alert('Certificado gerado')">Gerar</button>
+
+</section>
+
+<!-- QUIZ -->
+
+<section id="quiz">
+
+<h1>Quiz</h1>
+
+<p>Quanto é 3 × 3?</p>
+
+<button onclick="alert('Errado')">6</button>
+<button onclick="alert('Correto!')">9</button>
+
+</section>
+
+<!-- CACA PALAVRAS -->
+
+<section id="caca">
+
+<h1>Gerador Caça-Palavras</h1>
+
+<textarea rows="6"></textarea><br><br>
+
+<button onclick="alert('Criado')">Gerar</button>
+
+</section>
+
+<!-- MAPAS -->
+
+<section id="mapas">
+
+<h1>Mapas Educativos</h1>
+
+<ul>
+<li>Mapa do Brasil</li>
+<li>Mapa do Paraná</li>
+<li>Mapa Mundial</li>
+</ul>
+
+</section>
+
+<!-- LABORATORIO -->
+
+<section id="laboratorio">
+
+<h1>Laboratório Virtual</h1>
+
+<ul>
+<li>Gravidade</li>
+<li>Circuito elétrico</li>
+<li>Sistema solar</li>
+</ul>
+
+</section>
+
+<!-- PROJETOS -->
+
+<section id="projetos">
+
+<h1>Projetos Escolares</h1>
+
+<ul>
+<li>Feira de Ciências</li>
+<li>Projeto Leitura</li>
+<li>Projeto Meio Ambiente</li>
+</ul>
+
+</section>
+
+<!-- ENEM -->
+
+<section id="enem">
+
+<h1>Preparação ENEM</h1>
+
+<ul>
+<li>Simulados</li>
+<li>Questões anteriores</li>
+<li>Dicas de redação</li>
+</ul>
+
+</section>
+
+<!-- NOTICIAS -->
+
+<section id="noticias">
+
+<h1>Notícias da Educação</h1>
+
+<p>Atualizações sobre educação no Paraná.</p>
+
+</section>
+
+<!-- PLANEJADOR -->
+
+<section id="planejador">
+
+<h1>Planejador Semanal</h1>
+
+Segunda<br>
+<textarea rows="3"></textarea><br><br>
+
+Terça<br>
+<textarea rows="3"></textarea>
+
+</section>
+
+<!-- EDITOR -->
+
+<section id="editor">
+
+<h1>Editor de Documentos</h1>
+
+<textarea rows="20"></textarea>
+
+</section>
+
+<!-- SLIDES -->
+
+<section id="slides">
+
+<h1>Criador de Slides</h1>
+
+<textarea rows="10" placeholder="Conteúdo do slide"></textarea>
+
+</section>
+
+<!-- COMUNIDADE -->
+
+<section id="comunidade">
+
+<h1>Comunidade de Professores</h1>
+
+<textarea rows="5" placeholder="Compartilhe ideias"></textarea><br><br>
+
+<button>Publicar</button>
+
+</section>
+
+<!-- MYAKY BOT -->
+
+<section id="myakybot">
+
+<h1>Myaky Bot</h1>
+
+<input placeholder="Pergunte algo">
+
+<button onclick="alert('Processando pergunta...')">
+Perguntar
+</button>
+
+</section>
+
+</body>
+</html>
