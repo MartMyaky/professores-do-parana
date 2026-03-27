@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Painel Escolar</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e17;
+    --surface: #111827;
+    --surface2: #1a2235;
+    --border: rgba(255,255,255,0.07);
+    --accent: #00e5ff;
+    --accent2: #7c3aed;
+    --accent3: #f59e0b;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --green: #10b981;
+    --red: #ef4444;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Background grid */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,229,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,229,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Glow blobs */
+  .blob {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(120px);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .blob-1 {
+    width: 500px; height: 500px;
+    background: rgba(0,229,255,0.06);
+    top: -150px; left: -150px;
+  }
+  .blob-2 {
+    width: 400px; height: 400px;
+    background: rgba(124,58,237,0.07);
+    bottom: -100px; right: -100px;
+  }
+
+  /* Layout */
+  .wrapper {
+    position: relative;
+    z-index: 1;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 24px 20px 40px;
+  }
+
+  /* Header */
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .school-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .clock-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+  }
+
+  #relogio {
+    font-family: 'DM Mono', monospace;
+    font-size: 42px;
+    font-weight: 500;
+    color: #fff;
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+
+  #data {
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* Turno + turma selectors */
+  .selectors {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+  }
+
+  .selector-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1;
+    min-width: 140px;
+  }
+
+  .selector-label {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 500;
+  }
+
+  select {
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    cursor: pointer;
+    outline: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%2364748b' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 34px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  select:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(0,229,255,0.1);
+  }
+
+  /* Main card */
+  .main-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+
+  .card-header {
+    background: var(--surface2);
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .card-header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 12px var(--accent);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  .status-label {
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 500;
+  }
+
+  #status {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  .card-body {
+    padding: 28px 24px;
+  }
+
+  .aula-materia {
+    font-family: 'Syne', sans-serif;
+    font-size: 36px;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.1;
+    margin-bottom: 6px;
+    min-height: 44px;
+    transition: all 0.3s;
+  }
+
+  .aula-numero {
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 500;
+    margin-bottom: 20px;
+    min-height: 16px;
+  }
+
+  .info-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .info-chip {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .info-chip-label {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .info-chip-value {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  /* Progress bar */
+  .progress-section {
+    margin-top: 4px;
+  }
+
+  .progress-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+
+  .progress-label {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  #progresso-pct {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  .progress-bar-bg {
+    height: 6px;
+    background: var(--surface2);
+    border-radius: 99px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+
+  #barra {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--accent2), var(--accent));
+    border-radius: 99px;
+    transition: width 1s linear;
+    box-shadow: 0 0 12px rgba(0,229,255,0.4);
+  }
+
+  /* Next class card */
+  .next-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 18px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .next-icon {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    background: rgba(124,58,237,0.15);
+    border: 1px solid rgba(124,58,237,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 18px;
+  }
+
+  .next-content {
+    flex: 1;
+  }
+
+  .next-label {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 3px;
+  }
+
+  #proxima {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  /* Schedule grid */
+  .schedule-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    overflow: hidden;
+  }
+
+  .schedule-header {
+    background: var(--surface2);
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .schedule-title {
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 500;
+  }
+
+  .schedule-list {
+    padding: 8px 0;
+  }
+
+  .schedule-item {
+    display: grid;
+    grid-template-columns: 60px 1fr auto;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 24px;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.2s;
+    position: relative;
+  }
+
+  .schedule-item:last-child { border-bottom: none; }
+  .schedule-item:hover { background: var(--surface2); }
+
+  .schedule-item.active {
+    background: rgba(0,229,255,0.04);
+  }
+
+  .schedule-item.active::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--accent);
+    box-shadow: 0 0 12px var(--accent);
+  }
+
+  .schedule-item.past .s-materia { color: var(--muted); }
+  .schedule-item.past .s-num { color: #374151; }
+
+  .s-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .s-materia {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .s-prof {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  .s-time {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  /* Fora de horário */
+  .fora {
+    text-align: center;
+    padding: 48px 24px;
+    color: var(--muted);
+  }
+
+  .fora-icon {
+    font-size: 40px;
+    margin-bottom: 12px;
+  }
+
+  .fora-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 22px;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+
+  .fora-sub { font-size: 14px; }
+
+  /* Badge de turno */
+  .turno-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 99px;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+  }
+
+  .turno-Manha { background: rgba(245,158,11,0.15); color: var(--accent3); border: 1px solid rgba(245,158,11,0.2); }
+  .turno-Tarde  { background: rgba(16,185,129,0.15); color: var(--green); border: 1px solid rgba(16,185,129,0.2); }
+  .turno-Noite  { background: rgba(124,58,237,0.15); color: #a78bfa; border: 1px solid rgba(124,58,237,0.2); }
+
+  @media (max-width: 500px) {
+    #relogio { font-size: 30px; }
+    .aula-materia { font-size: 26px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+
+<div class="wrapper">
+
+  <!-- Header -->
+  <header>
+    <div>
+      <div class="school-name">📚 Painel Escolar</div>
+      <div id="turno-badge-wrap" style="margin-top:8px"></div>
+    </div>
+    <div class="clock-wrap">
+      <div id="relogio">--:--:--</div>
+      <div id="data"></div>
+    </div>
+  </header>
+
+  <!-- Selectors -->
+  <div class="selectors">
+    <div class="selector-group">
+      <div class="selector-label">Turno</div>
+      <select id="turnoSelect">
+        <option value="Manha">Manhã</option>
+        <option value="Tarde">Tarde</option>
+        <option value="Noite" selected>Noite</option>
+      </select>
+    </div>
+    <div class="selector-group">
+      <div class="selector-label">Turma</div>
+      <select id="turmaSelect">
+        <option>1C</option>
+        <option>2A</option>
+        <option>2B</option>
+        <option>2C</option>
+        <option>3A</option>
+        <option>3B</option>
+        <option>3C</option>
+        <option>6A</option>
+        <option>6B</option>
+        <option>6C</option>
+        <option>7A</option>
+        <option>7B</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Main card: aula atual -->
+  <div class="main-card" id="mainCard">
+    <div class="card-header">
+      <div class="card-header-left">
+        <div class="dot" id="dot"></div>
+        <span class="status-label">Aula em andamento</span>
+      </div>
+      <span id="status" class="status-label"></span>
+    </div>
+    <div class="card-body">
+      <div class="aula-numero" id="aulaNumero">–</div>
+      <div class="aula-materia" id="materia">–</div>
+      <div class="info-row">
+        <div class="info-chip">
+          <div class="info-chip-label">Professor(a)</div>
+          <div class="info-chip-value" id="professor">–</div>
+        </div>
+        <div class="info-chip">
+          <div class="info-chip-label">Sala</div>
+          <div class="info-chip-value" id="sala">–</div>
+        </div>
+      </div>
+      <div class="progress-section">
+        <div class="progress-meta">
+          <span class="progress-label">Progresso da aula</span>
+          <span id="progresso-pct">0%</span>
+        </div>
+        <div class="progress-bar-bg">
+          <div id="barra"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Próxima aula -->
+  <div class="next-card">
+    <div class="next-icon">⏭</div>
+    <div class="next-content">
+      <div class="next-label">Próxima aula</div>
+      <div id="proxima">–</div>
+    </div>
+  </div>
+
+  <!-- Grade do dia -->
+  <div class="schedule-section">
+    <div class="schedule-header">
+      <span style="font-size:14px">📋</span>
+      <span class="schedule-title">Grade do Dia</span>
+      <span id="dia-display" style="margin-left:auto;font-size:12px;color:var(--muted)"></span>
+    </div>
+    <div class="schedule-list" id="gradeList"></div>
+  </div>
+
+</div>
+
+<script>
+// ── HORÁRIOS DOS PERÍODOS ──
+const periodos = {
+  Manha: [
+    {aula:"1 Aula", inicio:"07:30", fim:"08:20"},
+    {aula:"2 Aula", inicio:"08:20", fim:"09:10"},
+    {aula:"3 Aula", inicio:"09:10", fim:"10:00"},
+    {aula:"intervalo", inicio:"10:00", fim:"10:20", label:"Intervalo"},
+    {aula:"4 Aula", inicio:"10:20", fim:"11:10"},
+    {aula:"5 Aula", inicio:"11:10", fim:"12:00"},
+    {aula:"6 Aula", inicio:"12:00", fim:"12:50"},
+  ],
+  Tarde: [
+    {aula:"1 Aula", inicio:"13:00", fim:"13:50"},
+    {aula:"2 Aula", inicio:"13:50", fim:"14:40"},
+    {aula:"3 Aula", inicio:"14:40", fim:"15:30"},
+    {aula:"intervalo", inicio:"15:30", fim:"15:50", label:"Intervalo"},
+    {aula:"4 Aula", inicio:"15:50", fim:"16:40"},
+    {aula:"5 Aula", inicio:"16:40", fim:"17:30"},
+  ],
+  Noite: [
+    {aula:"1 Aula", inicio:"19:00", fim:"19:50"},
+    {aula:"2 Aula", inicio:"19:50", fim:"20:40"},
+    {aula:"3 Aula", inicio:"20:40", fim:"21:30"},
+    {aula:"intervalo", inicio:"21:30", fim:"21:45", label:"Intervalo"},
+    {aula:"4 Aula", inicio:"21:45", fim:"22:35"},
+    {aula:"5 Aula", inicio:"22:35", fim:"23:25"},
+  ]
+};
+
+// ── BANCO DE DADOS DE AULAS ──
+const horarios = {
+Manha: [
+  {dia:"Segunda-Feira", turma:"8A", aula:"1 Aula", materia:"Ciências", professor:"Fábio", sala:""},
+  {dia:"Segunda-Feira", turma:"8A", aula:"2 Aula", materia:"Matemática", professor:"Philipe", sala:""},
+  {dia:"Segunda-Feira", turma:"8A", aula:"3 Aula", materia:"Matemática", professor:"Philipe", sala:""},
+  {dia:"Segunda-Feira", turma:"8A", aula:"4 Aula", materia:"História", professor:"Sérgio", sala:""},
+  {dia:"Segunda-Feira", turma:"8A", aula:"5 Aula", materia:"Ciências", professor:"Fábio", sala:""},
+  {dia:"Segunda-Feira", turma:"8B", aula:"1 Aula", materia:"Matemática", professor:"Philipe", sala:""},
+  {dia:"Segunda-Feira", turma:"8B", aula:"2 Aula", materia:"História", professor:"Sérgio", sala:""},
+  {dia:"Segunda-Feira", turma:"8B", aula:"3 Aula", materia:"Ciências", professor:"Fábio", sala:""},
+  {dia:"Segunda-Feira", turma:"8B", aula:"4 Aula", materia:"Geografia", professor:"Adriano", sala:""},
+  {dia:"Segunda-Feira", turma:"8B", aula:"5 Aula", materia:"Geografia", professor:"Adriano", sala:""},
+  {dia:"Segunda-Feira", turma:"8C", aula:"1 Aula", materia:"História", professor:"Sérgio", sala:""},
+  {dia:"Segunda-Feira", turma:"8C", aula:"2 Aula", materia:"Ciências", professor:"Fábio", sala:""},
+  {dia:"Segunda-Feira", turma:"8C", aula:"3 Aula", materia:"Inglês", professor:"Michelli", sala:""},
+  {dia:"Segunda-Feira", turma:"8C", aula:"4 Aula", materia:"Matemática", professor:"Philipe", sala:""},
+  {dia:"Segunda-Feira", turma:"8C", aula:"5 Aula", materia:"Redação/Leitura", professor:"Vercy", sala:""},
+  {dia:"Segunda-Feira", turma:"8D", aula:"1 Aula", materia:"Português", professor:"Mário", sala:""},
+  {dia:"Segunda-Feira", turma:"8D", aula:"2 Aula", materia:"Português", professor:"Mário", sala:""},
+  {dia:"Segunda-Feira", turma:"8D", aula:"3 Aula", materia:"Redação/Leitura", professor:"Vercy", sala:""},
+  {dia:"Segunda-Feira", turma:"8D", aula:"4 Aula", materia:"Ciências", professor:"Fábio", sala:""},
+  {dia:"Segunda-Feira", turma:"8D", aula:"5 Aula", materia:"Matemática", professor:"Philipe", sala:""},
+  {dia:"Segunda-Feira", turma:"9A", aula:"1 Aula", materia:"Ed. Física", professor:"Vladimir", sala:""},
+  {dia:"Segunda-Feira", turma:"9A", aula:"2 Aula", materia:"História", professor:"Jamil", sala:""},
+  {dia:"Segunda-Feira", turma:"9A", aula:"3 Aula", materia:"Matemática", professor:"Edna", sala:""},
+  {dia:"Segunda-Feira", turma:"9A", aula:"4 Aula", materia:"Inglês", professor:"Jamil", sala:""},
+  {dia:"Segunda-Feira", turma:"9A", aula:"5 Aula", materia:"Português", professor:"Mário", sala:""},
+  {dia:"Segunda-Feira", turma:"9B", aula:"1 Aula", materia:"Inglês", professor:"Michelli", sala:""},
+  {dia:"Segunda-Feira", turma:"9B", aula:"2 Aula", materia:"Ed. Física", professor:"Márcia", sala:""},
+  {dia:"Segunda-Feira", turma:"9B", aula:"3 Aula", materia:"Português", professor:"Mário", sala:""},
+  {dia:"Segunda-Feira", turma:"9B", aula:"4 Aula", materia:"Matemática", professor:"Márcia Ribeiro", sala:""},
+  {dia:"Segunda-Feira", turma:"9B", aula:"5 Aula", materia:"Matemática", professor:"Edna", sala:""},
+  {dia:"Segunda-Feira", turma:"9C", aula:"1 Aula", materia:"Matemática", professor:"Edna", sala:""},
+  {dia:"Segunda-Feira", turma:"9C", aula:"2 Aula", materia:"Geografia", professor:"Adriano", sala:""},
+  {dia:"Segunda-Feira", turma:"9C", aula:"3 Aula", materia:"História", professor:"Jamil", sala:""},
+  {dia:"Segunda-Feira", turma:"9C", aula:"4 Aula", materia:"Ed. Física", professor:"Márcia Ribeiro", sala:""},
+  {dia:"Segunda-Feira", turma:"9C", aula:"5 Aula", materia:"Inglês", professor:"Michelli", sala:""},
+  {dia:"Segunda-Feira", turma:"9D", aula:"1 Aula", materia:"Geografia", professor:"Adriano", sala:""},
+  {dia:"Segunda-Feira", turma:"9D", aula:"2 Aula", materia:"Rec. Português", professor:"Vercy", sala:""},
+  {dia:"Segunda-Feira", turma:"9D", aula:"3 Aula", materia:"História", professor:"Sérgio", sala:""},
+  {dia:"Segunda-Feira", turma:"9D", aula:"4 Aula", materia:"Português", professor:"Mário", sala:""},
+  {dia:"Segunda-Feira", turma:"9D", aula:"5 Aula", materia:"Ed. Física", professor:"Márcia Ribeiro", sala:""},
+  {dia:"Segunda-Feira", turma:"1A", aula:"1 Aula", materia:"Ed. Financeira", professor:"Ingrid", sala:""},
+  {dia:"Segunda-Feira", turma:"1A", aula:"2 Aula", materia:"Ed. Financeira", professor:"Ingrid", sala:""},
+  {dia:"Segunda-Feira", turma:"1A", aula:"3 Aula", materia:"Ed. Física", professor:"Márcia Ribeiro", sala:""},
+  {dia:"Segunda-Feira", turma:"1A", aula:"4 Aula", materia:"Matemática", professor:"Salete", sala:""},
+  {dia:"Segunda-Feira", turma:"1A", aula:"5 Aula", materia:"Matemática", professor:"Salete", sala:""},
+  {dia:"Segunda-Feira", turma:"1A", aula:"6 Aula", materia:"Português", professor:"Vercy", sala:""},
+  {dia:"Segunda-Feira", turma:"1B", aula:"1 Aula", materia:"Matemática", professor:"Salete", sala:""},
+  {dia:"Segunda-Feira", turma:"1B", aula:"2 Aula", materia:"Matemática", professor:"Salete", sala:""},
+  {dia:"Segunda-Feira", turma:"1B", aula:"3 Aula", materia:"Geografia", professor:"Adriano", sala:""},
+  {dia:"Segunda-Feira", turma:"1B", aula:"4 Aula", materia:"Mat. e Resolução", professor:"Rinaldo", sala:""},
+  {dia:"Segunda-Feira", turma:"1B", aula:"5 Aula", materia:"Mat. e Resolução", professor:"Rinaldo", sala:""},
+  {dia:"Segunda-Feira", turma:"1B", aula:"6 Aula", materia:"Ed. Física", professor:"Márcia Ribeiro", sala:""},
+  {dia:"Terça-Feira", turma:"8A", aula:"1 Aula", materia:"Ed. Física", professor:"Vladimir", sala:""},
+  {dia:"Terça-Feira", turma:"8A", aula:"2 Aula", materia:"Arte", professor:"Lucas", sala:""},
+  {dia:"Terça-Feira", turma:"8A", aula:"3 Aula", materia:"Português", professor:"Olienne", sala:""},
+  {dia:"Terça-Feira", turma:"8A", aula:"4 Aula", materia:"História", professor:"Sérgio", sala:""},
+  {dia:"Terça-Feira", turma:"8A", aula:"5 Aula", materia:"Ed. Digital", professor:"Neiva", sala:""},
+  {dia:"Terça-Feira", turma:"8B", aula:"1 Aula", materia:"Matemática", professor:"Philipe", sala:""},
+  {dia:"Terça-Feira", turma:"8B", aula:"2 Aula", materia:"Português", professor:"Olienne", sala:""},
+  {dia:"Terça-Feira", turma:"8B", aula:"3 Aula", materia:"Ciências", professor:"Fábio", sala:""},
+  {dia:"Terça-Feira", turma:"8B", aula:"4 Aula", materia:"Ed. Digital", professor:"Neiva", sala:""},
+  {dia:"Terça-Feira", turma:"8B", aula:"5 Aula", materia:"Ed. Física", professor:"Vladimir", sala:""},
+  {dia:"Terça-Feira", turma:"1A", aula:"1 Aula", materia:"Geografia", professor:"Giovanna", sala:""},
+  {dia:"Terça-Feira", turma:"1A", aula:"2 Aula", materia:"Arte", professor:"Giovanna", sala:""},
+  {dia:"Terça-Feira", turma:"1A", aula:"3 Aula", materia:"Arte Paranaense", professor:"Giovanna", sala:""},
+  {dia:"Terça-Feira", turma:"1A", aula:"4 Aula", materia:"Geografia do Paraná", professor:"Adriano", sala:""},
+  {dia:"Terça-Feira", turma:"1A", aula:"5 Aula", materia:"Biologia", professor:"Celio", sala:""},
+  {dia:"Terça-Feira", turma:"1A", aula:"6 Aula", materia:"Biologia", professor:"Celio", sala:""},
+  {dia:"Terça-Feira", turma:"1B", aula:"1 Aula", materia:"Arte", professor:"Salete", sala:""},
+  {dia:"Terça-Feira", turma:"1B", aula:"2 Aula", materia:"Matemática", professor:"Salete", sala:""},
+  {dia:"Terça-Feira", turma:"1B", aula:"3 Aula", materia:"Biologia", professor:"Celio", sala:""},
+  {dia:"Terça-Feira", turma:"1B", aula:"4 Aula", materia:"Biologia e Sust.", professor:"Celio", sala:""},
+  {dia:"Terça-Feira", turma:"1B", aula:"5 Aula", materia:"Português", professor:"Anna", sala:""},
+  {dia:"Terça-Feira", turma:"1B", aula:"6 Aula", materia:"Português", professor:"Anna", sala:""},
+  {dia:"Quarta-Feira", turma:"1A", aula:"1 Aula", materia:"História do Paraná", professor:"Sérgio", sala:""},
+  {dia:"Quarta-Feira", turma:"1A", aula:"2 Aula", materia:"História do Paraná", professor:"Sérgio", sala:""},
+  {dia:"Quarta-Feira", turma:"1A", aula:"3 Aula", materia:"Ed. Digital", professor:"Neiva", sala:""},
+  {dia:"Quarta-Feira", turma:"1A", aula:"5 Aula", materia:"Inglês", professor:"Michelli", sala:""},
+  {dia:"Quarta-Feira", turma:"1A", aula:"6 Aula", materia:"Inglês", professor:"Michelli", sala:""},
+  {dia:"Quarta-Feira", turma:"1B", aula:"1 Aula", materia:"Ed. Financeira", professor:"Maria Gabriela", sala:""},
+  {dia:"Quarta-Feira", turma:"1B", aula:"2 Aula", materia:"Ed. Financeira", professor:"Maria Gabriela", sala:""},
+  {dia:"Quarta-Feira", turma:"1B", aula:"3 Aula", materia:"Inglês", professor:"Michelli", sala:""},
+  {dia:"Quarta-Feira", turma:"1B", aula:"4 Aula", materia:"Biologia", professor:"Celio", sala:""},
+  {dia:"Quarta-Feira", turma:"1B", aula:"5 Aula", materia:"Biologia e Sust.", professor:"Celio", sala:""},
+  {dia:"Quinta-Feira", turma:"1A", aula:"1 Aula", materia:"Português", professor:"Vercy", sala:""},
+  {dia:"Quinta-Feira", turma:"1A", aula:"2 Aula", materia:"Português", professor:"Vercy", sala:""},
+  {dia:"Quinta-Feira", turma:"1A", aula:"3 Aula", materia:"Química", professor:"Rosemeire", sala:""},
+  {dia:"Quinta-Feira", turma:"1A", aula:"4 Aula", materia:"Matemática", professor:"Salete", sala:""},
+  {dia:"Quinta-Feira", turma:"1A", aula:"5 Aula", materia:"Matemática", professor:"Salete", sala:""},
+  {dia:"Quinta-Feira", turma:"1A", aula:"6 Aula", materia:"Ed. Física", professor:"Márcia Ribeiro", sala:""},
+  {dia:"Quinta-Feira", turma:"1B", aula:"1 Aula", materia:"Química", professor:"Rosemeire", sala:""},
+  {dia:"Quinta-Feira", turma:"1B", aula:"2 Aula", materia:"Ed. Física", professor:"Márcia Ribeiro", sala:""},
+  {dia:"Quinta-Feira", turma:"1B", aula:"3 Aula", materia:"Geografia", professor:"Adriano", sala:""},
+  {dia:"Quinta-Feira", turma:"1B", aula:"4 Aula", materia:"Química e Tec.", professor:"Rosemeire", sala:""},
+  {dia:"Quinta-Feira", turma:"1B", aula:"5 Aula", materia:"Ed. Digital", professor:"Neiva", sala:""},
+  {dia:"Quinta-Feira", turma:"1B", aula:"6 Aula", materia:"Ed. Digital", professor:"Neiva", sala:""},
+  {dia:"Sexta-Feira", turma:"1A", aula:"1 Aula", materia:"Arte", professor:"Giovanna", sala:""},
+  {dia:"Sexta-Feira", turma:"1A", aula:"2 Aula", materia:"Química", professor:"Rosemeire", sala:""},
+  {dia:"Sexta-Feira", turma:"1A", aula:"3 Aula", materia:"Química e Tec.", professor:"Rosemeire", sala:""},
+  {dia:"Sexta-Feira", turma:"1A", aula:"4 Aula", materia:"Arte Paranaense", professor:"Giovanna", sala:""},
+  {dia:"Sexta-Feira", turma:"1A", aula:"5 Aula", materia:"Português", professor:"Vercy", sala:""},
+  {dia:"Sexta-Feira", turma:"1A", aula:"6 Aula", materia:"Geografia", professor:"Adriano", sala:""},
+  {dia:"Sexta-Feira", turma:"1B", aula:"1 Aula", materia:"Química", professor:"Rosemeire", sala:""},
+  {dia:"Sexta-Feira", turma:"1B", aula:"2 Aula", materia:"Matemática", professor:"Salete", sala:""},
+  {dia:"Sexta-Feira", turma:"1B", aula:"3 Aula", materia:"Arte", professor:"Giovanna", sala:""},
+  {dia:"Sexta-Feira", turma:"1B", aula:"4 Aula", materia:"Português", professor:"Anna", sala:""},
+  {dia:"Sexta-Feira", turma:"1B", aula:"5 Aula", materia:"Português", professor:"Anna", sala:""},
+  {dia:"Sexta-Feira", turma:"1B", aula:"6 Aula", materia:"Português", professor:"Anna", sala:""},
+],
+Tarde: [
+  {dia:"Segunda-Feira", turma:"6A", aula:"1 Aula", materia:"Ciências", professor:"Bruna Alves", sala:""},
+  {dia:"Segunda-Feira", turma:"6A", aula:"2 Aula", materia:"Arte", professor:"Stelamary", sala:""},
+  {dia:"Segunda-Feira", turma:"6A", aula:"3 Aula", materia:"Leitura e Rec.", professor:"Vercy/Eduardo", sala:""},
+  {dia:"Segunda-Feira", turma:"6A", aula:"4 Aula", materia:"Matemática", professor:"Salete", sala:""},
+  {dia:"Segunda-Feira", turma:"6A", aula:"5 Aula", materia:"Matemática", professor:"Salete", sala:""},
+  {dia:"Segunda-Feira", turma:"6B", aula:"1 Aula", materia:"Matemática", professor:"Salete", sala:""},
+  {dia:"Segunda-Feira", turma:"6B", aula:"2 Aula", materia:"Ciências", professor:"Bruna Alves", sala:""},
+  {dia:"Segunda-Feira", turma:"6B", aula:"3 Aula", materia:"Português", professor:"Aline", sala:""},
+  {dia:"Segunda-Feira", turma:"6B", aula:"4 Aula", materia:"Arte", professor:"Stelamary", sala:""},
+  {dia:"Segunda-Feira", turma:"6B", aula:"5 Aula", materia:"Leitura e Rec.", professor:"Vercy/Eduardo", sala:""},
+  {dia:"Segunda-Feira", turma:"6C", aula:"1 Aula", materia:"Português", professor:"Aline", sala:""},
+  {dia:"Segunda-Feira", turma:"6C", aula:"2 Aula", materia:"Matemática", professor:"Salete", sala:""},
+  {dia:"Segunda-Feira", turma:"6C", aula:"3 Aula", materia:"História", professor:"Genilda", sala:""},
+  {dia:"Segunda-Feira", turma:"6C", aula:"4 Aula", materia:"Leitura e Rec.", professor:"Vercy/Eduardo", sala:""},
+  {dia:"Segunda-Feira", turma:"6C", aula:"5 Aula", materia:"Arte", professor:"Stelamary", sala:""},
+  {dia:"Segunda-Feira", turma:"7A", aula:"1 Aula", materia:"Matemática", professor:"Fernando", sala:""},
+  {dia:"Segunda-Feira", turma:"7A", aula:"2 Aula", materia:"História", professor:"Jamil", sala:""},
+  {dia:"Segunda-Feira", turma:"7A", aula:"3 Aula", materia:"Ens. Religioso", professor:"Jamil", sala:""},
+  {dia:"Segunda-Feira", turma:"7A", aula:"4 Aula", materia:"Ciências", professor:"Fábio", sala:""},
+  {dia:"Segunda-Feira", turma:"7A", aula:"5 Aula", materia:"Língua Inglesa", professor:"Vilma", sala:""},
+  {dia:"Segunda-Feira", turma:"7B", aula:"1 Aula", materia:"Ed. Física", professor:"Vladimir", sala:""},
+  {dia:"Segunda-Feira", turma:"7B", aula:"2 Aula", materia:"Matemática", professor:"Fernando", sala:""},
+  {dia:"Segunda-Feira", turma:"7B", aula:"3 Aula", materia:"Ciências", professor:"Fábio", sala:""},
+  {dia:"Segunda-Feira", turma:"7B", aula:"4 Aula", materia:"História", professor:"Jamil", sala:""},
+  {dia:"Segunda-Feira", turma:"7B", aula:"5 Aula", materia:"Geografia", professor:"Heloísa", sala:""},
+  {dia:"Terça-Feira", turma:"6A", aula:"1 Aula", materia:"Matemática", professor:"Salete", sala:""},
+  {dia:"Terça-Feira", turma:"6A", aula:"2 Aula", materia:"Rec. Matemática", professor:"Humberto/Márcia", sala:""},
+  {dia:"Terça-Feira", turma:"6A", aula:"3 Aula", materia:"Arte", professor:"Stelamary", sala:""},
+  {dia:"Terça-Feira", turma:"6A", aula:"4 Aula", materia:"Português", professor:"Aline", sala:""},
+  {dia:"Terça-Feira", turma:"6A", aula:"5 Aula", materia:"Ed. Física", professor:"Vladimir", sala:""},
+  {dia:"Quarta-Feira", turma:"6A", aula:"1 Aula", materia:"História", professor:"Genilda", sala:""},
+  {dia:"Quarta-Feira", turma:"6A", aula:"2 Aula", materia:"Rec. Matemática", professor:"Humberto/Márcia", sala:""},
+  {dia:"Quarta-Feira", turma:"6A", aula:"3 Aula", materia:"Ed. Física", professor:"Vladimir", sala:""},
+  {dia:"Quarta-Feira", turma:"6A", aula:"4 Aula", materia:"Português", professor:"Aline", sala:""},
+  {dia:"Quarta-Feira", turma:"6A", aula:"5 Aula", materia:"Ens. Religioso", professor:"Genilda", sala:""},
+  {dia:"Quinta-Feira", turma:"6A", aula:"1 Aula", materia:"Leitura e Rec.", professor:"Vercy/Eduardo", sala:""},
+  {dia:"Quinta-Feira", turma:"6A", aula:"2 Aula", materia:"Português", professor:"Aline", sala:""},
+  {dia:"Quinta-Feira", turma:"6A", aula:"3 Aula", materia:"Geografia", professor:"Adriano", sala:""},
+  {dia:"Quinta-Feira", turma:"6A", aula:"4 Aula", materia:"Geografia", professor:"Adriano", sala:""},
+  {dia:"Quinta-Feira", turma:"6A", aula:"5 Aula", materia:"Inglês", professor:"Vilma", sala:""},
+  {dia:"Sexta-Feira", turma:"6A", aula:"1 Aula", materia:"História", professor:"Genilda", sala:""},
+  {dia:"Sexta-Feira", turma:"6A", aula:"2 Aula", materia:"Matemática", professor:"Salete", sala:""},
+  {dia:"Sexta-Feira", turma:"6A", aula:"3 Aula", materia:"Inglês", professor:"Vilma", sala:""},
+  {dia:"Sexta-Feira", turma:"6A", aula:"4 Aula", materia:"Português", professor:"Aline", sala:""},
+  {dia:"Sexta-Feira", turma:"6A", aula:"5 Aula", materia:"Ciências", professor:"Bruna Alves", sala:""},
+  {dia:"Sexta-Feira", turma:"7A", aula:"1 Aula", materia:"Ed. Física", professor:"Vladimir", sala:""},
+  {dia:"Sexta-Feira", turma:"7A", aula:"2 Aula", materia:"História", professor:"Jamil", sala:""},
+  {dia:"Sexta-Feira", turma:"7A", aula:"3 Aula", materia:"Português", professor:"Maria Evilma", sala:""},
+  {dia:"Sexta-Feira", turma:"7A", aula:"4 Aula", materia:"Matemática", professor:"Fernando", sala:""},
+  {dia:"Sexta-Feira", turma:"7A", aula:"5 Aula", materia:"Inglês", professor:"Vilma", sala:""},
+],
+Noite: [
+  {dia:"Segunda-Feira", turma:"1C", aula:"1 Aula", materia:"Inglês", professor:"Vilma", sala:""},
+  {dia:"Segunda-Feira", turma:"1C", aula:"2 Aula", materia:"Matemática", professor:"Maria Helena", sala:""},
+  {dia:"Segunda-Feira", turma:"1C", aula:"3 Aula", materia:"Matemática", professor:"Maria Helena", sala:""},
+  {dia:"Segunda-Feira", turma:"1C", aula:"4 Aula", materia:"Arte", professor:"Claudinei", sala:""},
+  {dia:"Segunda-Feira", turma:"1C", aula:"5 Aula", materia:"Arte", professor:"Claudinei", sala:""},
+  {dia:"Segunda-Feira", turma:"2A", aula:"1 Aula", materia:"Sociologia", professor:"Rogério", sala:""},
+  {dia:"Segunda-Feira", turma:"2A", aula:"2 Aula", materia:"Ed. Financeira", professor:"Ingrid", sala:""},
+  {dia:"Segunda-Feira", turma:"2A", aula:"3 Aula", materia:"Matemática", professor:"Philipe", sala:""},
+  {dia:"Segunda-Feira", turma:"2A", aula:"4 Aula", materia:"Matemática", professor:"Philipe", sala:""},
+  {dia:"Segunda-Feira", turma:"2A", aula:"5 Aula", materia:"Física", professor:"Luciano", sala:""},
+  {dia:"Segunda-Feira", turma:"2B", aula:"1 Aula", materia:"Física", professor:"Luciano", sala:""},
+  {dia:"Segunda-Feira", turma:"2B", aula:"2 Aula", materia:"Sociologia", professor:"Rogério", sala:""},
+  {dia:"Segunda-Feira", turma:"2B", aula:"3 Aula", materia:"Ed. Financeira", professor:"Ingrid", sala:""},
+  {dia:"Segunda-Feira", turma:"2B", aula:"4 Aula", materia:"História", professor:"Neiva", sala:""},
+  {dia:"Segunda-Feira", turma:"2B", aula:"5 Aula", materia:"Matemática", professor:"Philipe", sala:""},
+  {dia:"Segunda-Feira", turma:"2C", aula:"1 Aula", materia:"Matemática", professor:"Philipe", sala:""},
+  {dia:"Segunda-Feira", turma:"2C", aula:"2 Aula", materia:"Matemática", professor:"Philipe", sala:""},
+  {dia:"Segunda-Feira", turma:"2C", aula:"3 Aula", materia:"Filosofia", professor:"Bárbara", sala:""},
+  {dia:"Segunda-Feira", turma:"2C", aula:"4 Aula", materia:"Aula IFA", professor:"Luciano/Humberto", sala:""},
+  {dia:"Segunda-Feira", turma:"2C", aula:"5 Aula", materia:"História", professor:"Neiva", sala:""},
+  {dia:"Segunda-Feira", turma:"3A", aula:"1 Aula", materia:"Rec. Aprend. Português", professor:"Anna", sala:""},
+  {dia:"Segunda-Feira", turma:"3A", aula:"2 Aula", materia:"Sociologia I", professor:"Rogério", sala:""},
+  {dia:"Segunda-Feira", turma:"3A", aula:"3 Aula", materia:"Sociologia I", professor:"Rogério", sala:""},
+  {dia:"Segunda-Feira", turma:"3A", aula:"4 Aula", materia:"Rec. Matemática", professor:"Ingrid", sala:""},
+  {dia:"Segunda-Feira", turma:"3A", aula:"5 Aula", materia:"Português", professor:"Anna", sala:""},
+  {dia:"Segunda-Feira", turma:"3B", aula:"1 Aula", materia:"Rec. Aprend. Matemática", professor:"Ingrid", sala:""},
+  {dia:"Segunda-Feira", turma:"3B", aula:"2 Aula", materia:"Português", professor:"Anna", sala:""},
+  {dia:"Segunda-Feira", turma:"3B", aula:"3 Aula", materia:"Inglês I", professor:"Vilma", sala:""},
+  {dia:"Segunda-Feira", turma:"3B", aula:"4 Aula", materia:"Matemática", professor:"Maria Helena", sala:""},
+  {dia:"Segunda-Feira", turma:"3B", aula:"5 Aula", materia:"Sociologia I", professor:"Rogério", sala:""},
+  {dia:"Segunda-Feira", turma:"3C", aula:"1 Aula", materia:"Sociologia I", professor:"Jamil", sala:""},
+  {dia:"Segunda-Feira", turma:"3C", aula:"2 Aula", materia:"Sociologia I", professor:"Jamil", sala:""},
+  {dia:"Segunda-Feira", turma:"3C", aula:"3 Aula", materia:"Português", professor:"Anna", sala:""},
+  {dia:"Segunda-Feira", turma:"3C", aula:"4 Aula", materia:"Português", professor:"Anna", sala:""},
+  {dia:"Segunda-Feira", turma:"3C", aula:"5 Aula", materia:"Matemática", professor:"Maria Helena", sala:""},
+  {dia:"Terça-Feira", turma:"1C", aula:"1 Aula", materia:"Ed. Física", professor:"Márcia Ribeiro", sala:""},
+  {dia:"Terça-Feira", turma:"1C", aula:"2 Aula", materia:"Ed. Física", professor:"Márcia Ribeiro", sala:""},
+  {dia:"Terça-Feira", turma:"1C", aula:"3 Aula", materia:"Química", professor:"Rosemeire", sala:""},
+  {dia:"Terça-Feira", turma:"1C", aula:"4 Aula", materia:"Química", professor:"Rosemeire", sala:""},
+  {dia:"Terça-Feira", turma:"1C", aula:"5 Aula", materia:"Geografia", professor:"Adriano", sala:""},
+  {dia:"Terça-Feira", turma:"2A", aula:"1 Aula", materia:"Inglês", professor:"Vilma", sala:""},
+  {dia:"Terça-Feira", turma:"2A", aula:"2 Aula", materia:"Aula IFA", professor:"Bárbara/Fama/Rogério", sala:""},
+  {dia:"Terça-Feira", turma:"2A", aula:"3 Aula", materia:"Português", professor:"Olienne", sala:""},
+  {dia:"Terça-Feira", turma:"2A", aula:"4 Aula", materia:"Português", professor:"Olienne", sala:""},
+  {dia:"Terça-Feira", turma:"2A", aula:"5 Aula", materia:"História", professor:"Neiva", sala:""},
+  {dia:"Terça-Feira", turma:"2B", aula:"1 Aula", materia:"Aula IFA", professor:"Bárbara/Fama/Rogério", sala:""},
+  {dia:"Terça-Feira", turma:"2B", aula:"2 Aula", materia:"Inglês", professor:"Vilma", sala:""},
+  {dia:"Terça-Feira", turma:"2B", aula:"3 Aula", materia:"História", professor:"Neiva", sala:""},
+  {dia:"Terça-Feira", turma:"2B", aula:"4 Aula", materia:"Filosofia", professor:"Bárbara", sala:""},
+  {dia:"Terça-Feira", turma:"2B", aula:"5 Aula", materia:"Português", professor:"Olienne", sala:""},
+  {dia:"Terça-Feira", turma:"2C", aula:"1 Aula", materia:"Português", professor:"Olienne", sala:""},
+  {dia:"Terça-Feira", turma:"2C", aula:"2 Aula", materia:"Português", professor:"Olienne", sala:""},
+  {dia:"Terça-Feira", turma:"2C", aula:"3 Aula", materia:"Arte", professor:"Claudinei", sala:""},
+  {dia:"Terça-Feira", turma:"2C", aula:"4 Aula", materia:"Ed. Física", professor:"Márcia Ribeiro", sala:""},
+  {dia:"Terça-Feira", turma:"2C", aula:"5 Aula", materia:"Ed. Física", professor:"Márcia Ribeiro", sala:""},
+  {dia:"Terça-Feira", turma:"3A", aula:"1 Aula", materia:"Rec. Aprend. Português", professor:"Anna", sala:""},
+  {dia:"Terça-Feira", turma:"3A", aula:"2 Aula", materia:"Português", professor:"Anna", sala:""},
+  {dia:"Terça-Feira", turma:"3A", aula:"3 Aula", materia:"Rec. Aprend. Português", professor:"Anna", sala:""},
+  {dia:"Terça-Feira", turma:"3A", aula:"4 Aula", materia:"Ed. Financeira", professor:"Jonas", sala:""},
+  {dia:"Terça-Feira", turma:"3A", aula:"5 Aula", materia:"Inglês I", professor:"Vilma", sala:""},
+  {dia:"Terça-Feira", turma:"3B", aula:"1 Aula", materia:"Português", professor:"Anna", sala:""},
+  {dia:"Terça-Feira", turma:"3B", aula:"2 Aula", materia:"Arte II", professor:"Claudinei", sala:""},
+  {dia:"Terça-Feira", turma:"3B", aula:"3 Aula", materia:"Ed. Financeira", professor:"Jonas", sala:""},
+  {dia:"Terça-Feira", turma:"3B", aula:"4 Aula", materia:"Português", professor:"Anna", sala:""},
+  {dia:"Terça-Feira", turma:"3B", aula:"5 Aula", materia:"Rec. Aprend. Português", professor:"Fiama", sala:""},
+  {dia:"Terça-Feira", turma:"3C", aula:"1 Aula", materia:"Português", professor:"Anna", sala:""},
+  {dia:"Terça-Feira", turma:"3C", aula:"2 Aula", materia:"Geografia I", professor:"Adriano", sala:""},
+  {dia:"Terça-Feira", turma:"3C", aula:"3 Aula", materia:"Inglês I", professor:"Vilma", sala:""},
+  {dia:"Terça-Feira", turma:"3C", aula:"4 Aula", materia:"Rec. Aprend. Português", professor:"Fiama", sala:""},
+  {dia:"Terça-Feira", turma:"3C", aula:"5 Aula", materia:"Ed. Financeira", professor:"Jonas", sala:""},
+  {dia:"Quarta-Feira", turma:"1C", aula:"1 Aula", materia:"Ed. Financeira", professor:"Philipe", sala:""},
+  {dia:"Quarta-Feira", turma:"1C", aula:"2 Aula", materia:"Português", professor:"Olienne", sala:""},
+  {dia:"Quarta-Feira", turma:"1C", aula:"3 Aula", materia:"Português", professor:"Olienne", sala:""},
+  {dia:"Quarta-Feira", turma:"1C", aula:"4 Aula", materia:"Biologia", professor:"Fernanda", sala:""},
+  {dia:"Quarta-Feira", turma:"1C", aula:"5 Aula", materia:"Biologia", professor:"Fernanda", sala:""},
+  {dia:"Quarta-Feira", turma:"2A", aula:"1 Aula", materia:"Português", professor:"Olienne", sala:""},
+  {dia:"Quarta-Feira", turma:"2A", aula:"2 Aula", materia:"Filosofia", professor:"Bárbara", sala:""},
+  {dia:"Quarta-Feira", turma:"2A", aula:"3 Aula", materia:"Filosofia", professor:"Bárbara", sala:""},
+  {dia:"Quarta-Feira", turma:"2A", aula:"4 Aula", materia:"Ed. Física", professor:"Ricardo", sala:""},
+  {dia:"Quarta-Feira", turma:"2A", aula:"5 Aula", materia:"Ed. Física", professor:"Ricardo", sala:""},
+  {dia:"Quarta-Feira", turma:"2B", aula:"1 Aula", materia:"Filosofia", professor:"Bárbara", sala:""},
+  {dia:"Quarta-Feira", turma:"2B", aula:"2 Aula", materia:"Ed. Física", professor:"Ricardo", sala:""},
+  {dia:"Quarta-Feira", turma:"2B", aula:"3 Aula", materia:"Ed. Física", professor:"Ricardo", sala:""},
+  {dia:"Quarta-Feira", turma:"2B", aula:"4 Aula", materia:"Português", professor:"Olienne", sala:""},
+  {dia:"Quarta-Feira", turma:"2B", aula:"5 Aula", materia:"Português", professor:"Olienne", sala:""},
+  {dia:"Quarta-Feira", turma:"2C", aula:"1 Aula", materia:"Filosofia", professor:"Bárbara", sala:""},
+  {dia:"Quarta-Feira", turma:"2C", aula:"2 Aula", materia:"Ed. Financeira", professor:"Ingrid", sala:""},
+  {dia:"Quarta-Feira", turma:"2C", aula:"3 Aula", materia:"Sociologia", professor:"Rogério", sala:""},
+  {dia:"Quarta-Feira", turma:"2C", aula:"4 Aula", materia:"Filosofia", professor:"Bárbara", sala:""},
+  {dia:"Quarta-Feira", turma:"2C", aula:"5 Aula", materia:"Arte", professor:"Claudinei", sala:""},
+  {dia:"Quarta-Feira", turma:"3A", aula:"1 Aula", materia:"Rec. Aprend. Matemática", professor:"Ingrid", sala:""},
+  {dia:"Quarta-Feira", turma:"3A", aula:"2 Aula", materia:"Sociologia I", professor:"Rogério", sala:""},
+  {dia:"Quarta-Feira", turma:"3A", aula:"3 Aula", materia:"Arte II", professor:"Claudinei", sala:""},
+  {dia:"Quarta-Feira", turma:"3A", aula:"4 Aula", materia:"Rec. Português", professor:"Anna", sala:""},
+  {dia:"Quarta-Feira", turma:"3A", aula:"5 Aula", materia:"Português", professor:"Anna", sala:""},
+  {dia:"Quarta-Feira", turma:"3B", aula:"1 Aula", materia:"Português", professor:"Anna", sala:""},
+  {dia:"Quarta-Feira", turma:"3B", aula:"2 Aula", materia:"Português", professor:"Anna", sala:""},
+  {dia:"Quarta-Feira", turma:"3B", aula:"3 Aula", materia:"Rec. Aprend. Matemática", professor:"Ingrid", sala:""},
+  {dia:"Quarta-Feira", turma:"3B", aula:"4 Aula", materia:"Rec. Aprend. Matemática", professor:"Ingrid", sala:""},
+  {dia:"Quarta-Feira", turma:"3B", aula:"5 Aula", materia:"Física", professor:"Luciano", sala:""},
+  {dia:"Quarta-Feira", turma:"3C", aula:"1 Aula", materia:"Arte II", professor:"Claudinei", sala:""},
+  {dia:"Quarta-Feira", turma:"3C", aula:"2 Aula", materia:"Arte II", professor:"Claudinei", sala:""},
+  {dia:"Quarta-Feira", turma:"3C", aula:"3 Aula", materia:"Português", professor:"Anna", sala:""},
+  {dia:"Quarta-Feira", turma:"3C", aula:"4 Aula", materia:"Português", professor:"Anna", sala:""},
+  {dia:"Quarta-Feira", turma:"3C", aula:"5 Aula", materia:"Rec. Português", professor:"Fiama", sala:""},
+  {dia:"Quinta-Feira", turma:"1C", aula:"1 Aula", materia:"Matemática", professor:"Maria Helena", sala:""},
+  {dia:"Quinta-Feira", turma:"1C", aula:"2 Aula", materia:"Ed. Financeira", professor:"Philipe", sala:""},
+  {dia:"Quinta-Feira", turma:"1C", aula:"3 Aula", materia:"Aula IFA", professor:"Claudinei, Adriano, Neiva", sala:""},
+  {dia:"Quinta-Feira", turma:"1C", aula:"4 Aula", materia:"Geografia", professor:"Adriano", sala:""},
+  {dia:"Quinta-Feira", turma:"1C", aula:"5 Aula", materia:"Ed. Digital", professor:"Neiva", sala:""},
+  {dia:"Quinta-Feira", turma:"2A", aula:"1 Aula", materia:"História", professor:"Neiva", sala:""},
+  {dia:"Quinta-Feira", turma:"2A", aula:"2 Aula", materia:"Sociologia", professor:"Rogério", sala:""},
+  {dia:"Quinta-Feira", turma:"2A", aula:"3 Aula", materia:"Inglês", professor:"Vilma", sala:""},
+  {dia:"Quinta-Feira", turma:"2A", aula:"4 Aula", materia:"Arte", professor:"Claudinei", sala:""},
+  {dia:"Quinta-Feira", turma:"2A", aula:"5 Aula", materia:"Arte", professor:"Claudinei", sala:""},
+  {dia:"Quinta-Feira", turma:"2B", aula:"1 Aula", materia:"Arte", professor:"Claudinei", sala:""},
+  {dia:"Quinta-Feira", turma:"2B", aula:"2 Aula", materia:"Arte", professor:"Claudinei", sala:""},
+  {dia:"Quinta-Feira", turma:"2B", aula:"3 Aula", materia:"Matemática", professor:"Philipe", sala:""},
+  {dia:"Quinta-Feira", turma:"2B", aula:"4 Aula", materia:"Matemática", professor:"Philipe", sala:""},
+  {dia:"Quinta-Feira", turma:"2B", aula:"5 Aula", materia:"Sociologia", professor:"Rogério", sala:""},
+  {dia:"Quinta-Feira", turma:"2C", aula:"1 Aula", materia:"Matemática", professor:"Philipe", sala:""},
+  {dia:"Quinta-Feira", turma:"2C", aula:"2 Aula", materia:"Inglês", professor:"Vilma", sala:""},
+  {dia:"Quinta-Feira", turma:"2C", aula:"3 Aula", materia:"Sociologia", professor:"Rogério", sala:""},
+  {dia:"Quinta-Feira", turma:"2C", aula:"4 Aula", materia:"Física", professor:"Luciano", sala:""},
+  {dia:"Quinta-Feira", turma:"2C", aula:"5 Aula", materia:"Português", professor:"Olienne", sala:""},
+  {dia:"Quinta-Feira", turma:"3A", aula:"1 Aula", materia:"Geografia I", professor:"Adriano", sala:""},
+  {dia:"Quinta-Feira", turma:"3A", aula:"2 Aula", materia:"História I", professor:"Neiva", sala:""},
+  {dia:"Quinta-Feira", turma:"3A", aula:"3 Aula", materia:"Matemática", professor:"Maria Helena", sala:""},
+  {dia:"Quinta-Feira", turma:"3A", aula:"4 Aula", materia:"Inglês I", professor:"Vilma", sala:""},
+  {dia:"Quinta-Feira", turma:"3A", aula:"5 Aula", materia:"Física", professor:"Luciano", sala:""},
+  {dia:"Quinta-Feira", turma:"3B", aula:"1 Aula", materia:"Inglês I", professor:"Vilma", sala:""},
+  {dia:"Quinta-Feira", turma:"3B", aula:"2 Aula", materia:"Geografia I", professor:"Adriano", sala:""},
+  {dia:"Quinta-Feira", turma:"3B", aula:"3 Aula", materia:"Ciências", professor:"Fábio", sala:""},
+  {dia:"Quinta-Feira", turma:"3B", aula:"4 Aula", materia:"Sociologia I", professor:"Rogério", sala:""},
+  {dia:"Quinta-Feira", turma:"3B", aula:"5 Aula", materia:"Matemática", professor:"Maria Helena", sala:""},
+  {dia:"Quinta-Feira", turma:"3C", aula:"1 Aula", materia:"Inglês I", professor:"Vilma", sala:""},
+  {dia:"Quinta-Feira", turma:"3C", aula:"2 Aula", materia:"Arte", professor:"Claudinei", sala:""},
+  {dia:"Quinta-Feira", turma:"3C", aula:"3 Aula", materia:"Ciências", professor:"Fábio", sala:""},
+  {dia:"Quinta-Feira", turma:"3C", aula:"4 Aula", materia:"História I", professor:"Neiva", sala:""},
+  {dia:"Quinta-Feira", turma:"3C", aula:"5 Aula", materia:"Ed. Física", professor:"Márcio", sala:""},
+  {dia:"Sexta-Feira", turma:"1C", aula:"1 Aula", materia:"Matemática", professor:"Maria Helena", sala:""},
+  {dia:"Sexta-Feira", turma:"1C", aula:"2 Aula", materia:"Português", professor:"Olienne", sala:""},
+  {dia:"Sexta-Feira", turma:"1C", aula:"3 Aula", materia:"Português", professor:"Olienne", sala:""},
+  {dia:"Sexta-Feira", turma:"1C", aula:"4 Aula", materia:"Ed. Digital", professor:"Neiva", sala:""},
+  {dia:"Sexta-Feira", turma:"1C", aula:"5 Aula", materia:"Inglês", professor:"Vilma", sala:""},
+  {dia:"Sexta-Feira", turma:"2A", aula:"1 Aula", materia:"Ed. Financeira", professor:"Ingrid", sala:""},
+  {dia:"Sexta-Feira", turma:"2A", aula:"2 Aula", materia:"Matemática", professor:"Philipe", sala:""},
+  {dia:"Sexta-Feira", turma:"2A", aula:"3 Aula", materia:"Matemática", professor:"Philipe", sala:""},
+  {dia:"Sexta-Feira", turma:"2A", aula:"4 Aula", materia:"Português", professor:"Olienne", sala:""},
+  {dia:"Sexta-Feira", turma:"2A", aula:"5 Aula", materia:"Arte", professor:"Claudinei", sala:""},
+  {dia:"Sexta-Feira", turma:"2B", aula:"1 Aula", materia:"Português", professor:"Olienne", sala:""},
+  {dia:"Sexta-Feira", turma:"2B", aula:"2 Aula", materia:"Física", professor:"Luciano", sala:""},
+  {dia:"Sexta-Feira", turma:"2B", aula:"3 Aula", materia:"Matemática", professor:"Philipe", sala:""},
+  {dia:"Sexta-Feira", turma:"2B", aula:"4 Aula", materia:"Inglês", professor:"Vilma", sala:""},
+  {dia:"Sexta-Feira", turma:"2B", aula:"5 Aula", materia:"Matemática", professor:"Philipe", sala:""},
+  {dia:"Sexta-Feira", turma:"2C", aula:"1 Aula", materia:"Matemática", professor:"Philipe", sala:""},
+  {dia:"Sexta-Feira", turma:"2C", aula:"2 Aula", materia:"Inglês", professor:"Vilma", sala:""},
+  {dia:"Sexta-Feira", turma:"2C", aula:"3 Aula", materia:"Ed. Financeira", professor:"Ingrid", sala:""},
+  {dia:"Sexta-Feira", turma:"2C", aula:"4 Aula", materia:"Ed. Financeira", professor:"Ingrid", sala:""},
+  {dia:"Sexta-Feira", turma:"2C", aula:"5 Aula", materia:"Português", professor:"Olienne", sala:""},
+  {dia:"Sexta-Feira", turma:"3A", aula:"1 Aula", materia:"Português", professor:"Anna", sala:""},
+  {dia:"Sexta-Feira", turma:"3A", aula:"2 Aula", materia:"Projeto de Vida", professor:"Neiva", sala:""},
+  {dia:"Sexta-Feira", turma:"3A", aula:"3 Aula", materia:"Ed. Física", professor:"Márcio", sala:""},
+  {dia:"Sexta-Feira", turma:"3A", aula:"4 Aula", materia:"Ed. Física", professor:"Márcio", sala:""},
+  {dia:"Sexta-Feira", turma:"3A", aula:"5 Aula", materia:"Matemática", professor:"Maria Helena", sala:""},
+  {dia:"Sexta-Feira", turma:"3B", aula:"1 Aula", materia:"Física", professor:"Luciano", sala:""},
+  {dia:"Sexta-Feira", turma:"3B", aula:"2 Aula", materia:"Ed. Física", professor:"Márcio", sala:""},
+  {dia:"Sexta-Feira", turma:"3B", aula:"3 Aula", materia:"Projeto de Vida", professor:"Neiva", sala:""},
+  {dia:"Sexta-Feira", turma:"3B", aula:"4 Aula", materia:"Matemática", professor:"Maria Helena", sala:""},
+  {dia:"Sexta-Feira", turma:"3B", aula:"5 Aula", materia:"História I", professor:"Neiva", sala:""},
+  {dia:"Sexta-Feira", turma:"3C", aula:"1 Aula", materia:"Projeto de Vida", professor:"Vilma", sala:""},
+  {dia:"Sexta-Feira", turma:"3C", aula:"2 Aula", materia:"Rec. Aprend. Matemática", professor:"Ingrid", sala:""},
+  {dia:"Sexta-Feira", turma:"3C", aula:"3 Aula", materia:"Matemática", professor:"Maria Helena", sala:""},
+  {dia:"Sexta-Feira", turma:"3C", aula:"4 Aula", materia:"Física", professor:"Luciano", sala:""},
+  {dia:"Sexta-Feira", turma:"3C", aula:"5 Aula", materia:"Ed. Física", professor:"Márcio", sala:""},
+]
+};
+
+// ── UTILITÁRIOS ──
+function toMinutes(hm) {
+  const [h, m] = hm.split(':').map(Number);
+  return h * 60 + m;
+}
+
+function getNow() {
+  const now = new Date();
+  return { h: now.getHours(), m: now.getMinutes(), s: now.getSeconds(), total: now.getHours()*60 + now.getMinutes() };
+}
+
+function getDiaPtBR() {
+  const dias = ['Domingo','Segunda-Feira','Terça-Feira','Quarta-Feira','Quinta-Feira','Sexta-Feira','Sábado'];
+  return dias[new Date().getDay()];
+}
+
+function getDiaDisplay() {
+  return new Date().toLocaleDateString('pt-BR', { weekday:'long', day:'numeric', month:'long' });
+}
+
+// ── LÓGICA PRINCIPAL ──
+function getAulasHoje(turno, turma) {
+  const dia = getDiaPtBR();
+  return horarios[turno]?.filter(a => a.dia === dia && a.turma === turma) || [];
+}
+
+function getPeriodosAulas(turno) {
+  return periodos[turno]?.filter(p => p.aula !== 'intervalo') || [];
+}
+
+function encontrarAulaAtual(turno) {
+  const agora = getNow().total;
+  const lista = periodos[turno] || [];
+  for (let i = 0; i < lista.length; i++) {
+    const p = lista[i];
+    if (agora >= toMinutes(p.inicio) && agora < toMinutes(p.fim)) {
+      return { periodo: p, index: i };
+    }
+  }
+  return null;
+}
+
+function render() {
+  const turno = document.getElementById('turnoSelect').value;
+  const turma = document.getElementById('turmaSelect').value;
+  const agora = getNow();
+  const dia = getDiaPtBR();
+  const diaSemana = ['Domingo','Sábado'].includes(dia);
+
+  // Relógio e data
+  document.getElementById('relogio').textContent =
+    String(agora.h).padStart(2,'0') + ':' + String(agora.m).padStart(2,'0') + ':' + String(agora.s).padStart(2,'0');
+  document.getElementById('data').textContent = getDiaDisplay().toUpperCase();
+  document.getElementById('dia-display').textContent = dia;
+
+  // Badge de turno
+  const turnoLabels = { Manha:'☀️ Manhã', Tarde:'🌤 Tarde', Noite:'🌙 Noite' };
+  document.getElementById('turno-badge-wrap').innerHTML =
+    `<span class="turno-badge turno-${turno}">${turnoLabels[turno]}</span>`;
+
+  // Aulas do dia
+  const aulasHoje = getAulasHoje(turno, turma);
+  const periodosAulas = getPeriodosAulas(turno);
+  const aulaAtualInfo = encontrarAulaAtual(turno);
+
+  // Grade do dia
+  const gradeList = document.getElementById('gradeList');
+  if (diaSemana || periodosAulas.length === 0) {
+    gradeList.innerHTML = `<div class="fora"><div class="fora-icon">🏫</div><div class="fora-title">Sem aulas</div><div class="fora-sub">Aproveite o descanso!</div></div>`;
+  } else {
+    gradeList.innerHTML = periodos[turno].map((p, i) => {
+      if (p.aula === 'intervalo') {
+        return `<div class="schedule-item" style="opacity:0.5">
+          <span class="s-num">–</span>
+          <div><div class="s-materia">☕ Intervalo</div><div class="s-prof"></div></div>
+          <span class="s-time">${p.inicio} – ${p.fim}</span>
+        </div>`;
+      }
+      const info = aulasHoje.find(a => a.aula === p.aula);
+      const agoraMin = agora.total;
+      const isActive = aulaAtualInfo?.periodo?.aula === p.aula;
+      const isPast = agoraMin >= toMinutes(p.fim);
+      const cls = isActive ? 'active' : isPast ? 'past' : '';
+      const materia = info?.materia || '–';
+      const prof = info?.professor || '';
+      return `<div class="schedule-item ${cls}">
+        <span class="s-num">${p.aula.replace(' Aula','ª')}</span>
+        <div><div class="s-materia">${materia}</div>${prof ? `<div class="s-prof">${prof}</div>` : ''}</div>
+        <span class="s-time">${p.inicio}<br>${p.fim}</span>
+      </div>`;
+    }).join('');
+  }
+
+  // Painel principal
+  if (!aulaAtualInfo || diaSemana) {
+    // Fora do horário de aula
+    document.getElementById('status').textContent = '';
+    document.getElementById('dot').style.display = 'none';
+    document.getElementById('aulaNumero').textContent = '';
+    document.getElementById('materia').innerHTML = `<span style="font-size:28px;color:var(--muted)">Fora do horário de aulas</span>`;
+    document.getElementById('professor').textContent = '–';
+    document.getElementById('sala').textContent = '–';
+    document.getElementById('barra').style.width = '0%';
+    document.getElementById('progresso-pct').textContent = '0%';
+    document.getElementById('proxima').textContent = '–';
+    return;
+  }
+
+  const { periodo, index } = aulaAtualInfo;
+  document.getElementById('dot').style.display = '';
+
+  // Se for intervalo
+  if (periodo.aula === 'intervalo') {
+    document.getElementById('status').textContent = 'INTERVALO';
+    document.getElementById('aulaNumero').textContent = '';
+    document.getElementById('materia').innerHTML = `<span style="color:var(--accent3)">☕ Intervalo</span>`;
+    document.getElementById('professor').textContent = '–';
+    document.getElementById('sala').textContent = '–';
+    const total = toMinutes(periodo.fim) - toMinutes(periodo.inicio);
+    const passou = agora.total - toMinutes(periodo.inicio);
+    const pct = Math.min(100, Math.round((passou / total) * 100));
+    document.getElementById('barra').style.width = pct + '%';
+    document.getElementById('progresso-pct').textContent = pct + '%';
+    document.getElementById('proxima').textContent = '–';
+    return;
+  }
+
+  const info = aulasHoje.find(a => a.aula === periodo.aula);
+  document.getElementById('status').textContent = periodo.aula.toUpperCase();
+  document.getElementById('aulaNumero').textContent = periodo.inicio + ' – ' + periodo.fim;
+  document.getElementById('materia').textContent = info?.materia || 'Sem aula para esta turma';
+  document.getElementById('professor').textContent = info?.professor || '–';
+  document.getElementById('sala').textContent = info?.sala || '–';
+
+  // Barra de progresso
+  const inicioMin = toMinutes(periodo.inicio);
+  const fimMin = toMinutes(periodo.fim);
+  const total = fimMin - inicioMin;
+  const passou = agora.total - inicioMin + agora.s/60;
+  const pct = Math.min(100, Math.round((passou / total) * 100));
+  document.getElementById('barra').style.width = pct + '%';
+  document.getElementById('progresso-pct').textContent = pct + '%';
+
+  // Próxima aula
+  const restante = periodos[turno];
+  let prox = null;
+  for (let i = index + 1; i < restante.length; i++) {
+    if (restante[i].aula !== 'intervalo') {
+      prox = restante[i]; break;
+    } else {
+      prox = restante[i]; break; // mostra intervalo como próximo
+    }
+  }
+
+  if (prox) {
+    if (prox.aula === 'intervalo') {
+      document.getElementById('proxima').textContent = `☕ Intervalo às ${prox.inicio}`;
+    } else {
+      const proxInfo = aulasHoje.find(a => a.aula === prox.aula);
+      document.getElementById('proxima').textContent =
+        proxInfo ? `${proxInfo.materia} – ${proxInfo.professor} (${prox.inicio})` : `${prox.aula} às ${prox.inicio}`;
+    }
+  } else {
+    document.getElementById('proxima').textContent = 'Fim do turno';
+  }
+}
+
+// Atualiza a grade quando muda a turma/turno
+document.getElementById('turmaSelect').addEventListener('change', render);
+document.getElementById('turnoSelect').addEventListener('change', () => {
+  // Filtrar turmas válidas para o turno selecionado
+  render();
+});
+
+// Loop
+render();
+setInterval(render, 1000);
+</script>
+</body>
+</html>
